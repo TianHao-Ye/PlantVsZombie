@@ -8,13 +8,14 @@
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class ZoobieManager extends cc.Component {
+export default class PlantCardManager extends cc.Component {
 
-    @property(cc.Label)
-    label: cc.Label = null;
 
-    @property
-    text: string = 'hello';
+    @property([cc.Prefab])
+    plantCardPrefabs: cc.Prefab[] = [];
+
+    @property(cc.Prefab)
+    peashooterPrefab: cc.Prefab = undefined;
 
     // LIFE-CYCLE CALLBACKS:
 

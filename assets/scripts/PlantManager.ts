@@ -1,16 +1,13 @@
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
-
-    @property(cc.Label)
-    label: cc.Label = null;
-
-    @property
-    text: string = 'hello';
+export default class PlantManager extends cc.Component {
 
     @property(cc.Node)
     plantLayer: cc.Node = undefined;
+
+    @property(cc.Prefab)
+    peashooterPrefab: cc.Prefab = undefined;
 
     @property([cc.Prefab])
     plantPrefabs: cc.Prefab[] = [];
