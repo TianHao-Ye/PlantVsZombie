@@ -10,6 +10,8 @@ const {ccclass, property} = cc._decorator;
 @ccclass
 export default class PlantCardManager extends cc.Component {
 
+    @property([cc.Node])
+    plantCardLayer: cc.Node = undefined;
 
     @property([cc.Prefab])
     plantCardPrefabs: cc.Prefab[] = [];
