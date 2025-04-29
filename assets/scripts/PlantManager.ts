@@ -6,18 +6,21 @@ export default class PlantManager extends cc.Component {
     @property(cc.Node)
     plantLayer: cc.Node = undefined;
 
-    @property(cc.Prefab)
-    peashooterPrefab: cc.Prefab = undefined;
-
     @property([cc.Prefab])
     plantPrefabs: cc.Prefab[] = [];
 
+    private _plantPrefabMap: { [key: string]: cc.Prefab } = {};
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {}
+    protected onLoad (): void {
+        for (const prefab of this.plantPrefabs) {
+            const name = prefab.name;
+            this._plantPrefabMap[name] = prefab;
+        }
+    }
 
-    start () {
+    protected start (): void {
 
     }
 
@@ -29,5 +32,9 @@ export default class PlantManager extends cc.Component {
     //     plant.parent = this.plantLayer;
     //     plant.setPosition(position);
     // }
+
+    public getPlantPrefabByName(name: string): cc.Prefab | null {
+        return this._plantPrefabMap[name] || null;
+    }
     
 }

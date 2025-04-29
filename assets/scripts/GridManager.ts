@@ -22,8 +22,6 @@ export default class GridManager extends cc.Component {
 
     @property
     cols: number = 7;
-    //-700 400
-    //460 -465
 
     private _gridData: (cc.Node | undefined)[][] = [];
  

@@ -14,16 +14,24 @@ export default class PlantCardManager extends cc.Component {
     @property([cc.Prefab])
     plantCardPrefabs: cc.Prefab[] = [];
 
-    @property(cc.Prefab)
-    peashooterPrefab: cc.Prefab = undefined;
+    private _plantCardPrefabMap: { [key: string]: cc.Prefab } = {};
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {}
+    protected onLoad(): void {
+        for (const prefab of this.plantCardPrefabs) {
+            const name = prefab.name;
+            this._plantCardPrefabMap[name] = prefab;
+        }
+    }
 
-    start () {
+    protected start (): void {
 
     }
 
     // update (dt) {}
+
+    public getPlantPrefabByName(name: string): cc.Prefab | null {
+        return this._plantCardPrefabMap[name] || null;
+    }
 }

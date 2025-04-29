@@ -25,11 +25,11 @@ export default class GameManager extends cc.Component {
     // LIFE-CYCLE CALLBACKS:
     
 
-    protected onLoad() {
+    protected onLoad(): void {
         this.background.on(cc.Node.EventType.TOUCH_END, this.onTouch, this);
     }
 
-    protected start () {
+    protected start (): void {
 
     }
 
@@ -42,7 +42,7 @@ export default class GameManager extends cc.Component {
         const gridPos = this.gridManager.getComponent(GridManager)._worldPosToGrid(localPos);
 
         if (gridPos) {
-            const plantNode = cc.instantiate(this.plantManager.getComponent(PlantManager).peashooterPrefab);
+            const plantNode = cc.instantiate(this.plantManager.getComponent(PlantManager).getPlantPrefabByName('pea_shooter'));
 
             if(plantNode){
                 this.gridManager.getComponent(GridManager).plantAt(gridPos.row, gridPos.col, plantNode);
