@@ -1,3 +1,4 @@
+import DragManager from "./DragManager";
 import GridManager from "./GridManager";
 import PlantCardManager from "./PlantCardManager";
 import PlantManager from "./PlantManager";
@@ -24,35 +25,26 @@ export default class GameManager extends cc.Component {
   // LIFE-CYCLE CALLBACKS:
 
   protected onLoad(): void {
-    // this.background.on(cc.Node.EventType.TOUCH_END, this.onTouch, this);
-    this.plantCardManager.getComponent(PlantCardManager).loadPlantCards();
-    console.log("i am initialized");
+    this.getScriptPlantCardManager().loadPlantCards();
   }
 
   protected start(): void {}
 
   // update (dt) {}
 
-  // onTouch(event: cc.Event.EventTouch) {
-  //   const touchPos = event.getLocation();
-  //   const localPos = this.background.convertToNodeSpaceAR(touchPos);
+  public getScriptPlantCardManager(): PlantCardManager {
+    return this.plantCardManager.getComponent(PlantCardManager);
+  }
 
-  //   const gridPos = this.gridManager
-  //     .getComponent(GridManager)
-  //     ._worldPosToGrid(localPos);
+  public getScriptGridManager(): GridManager {
+    return this.gridManager.getComponent(GridManager);
+  }
 
-  //   if (gridPos) {
-  //     const plantNode = cc.instantiate(
-  //       this.plantManager
-  //         .getComponent(PlantManager)
-  //         .getPlantPrefabByName("pea_shooter")
-  //     );
+  public getScriptPlantManager(): PlantManager {
+    return this.plantManager.getComponent(PlantManager);
+  }
 
-  //     if (plantNode) {
-  //       this.gridManager
-  //         .getComponent(GridManager)
-  //         .plantAt(gridPos.row, gridPos.col, plantNode);
-  //     }
-  //   }
-  // }
+  public getScriptDragManager(): DragManager {
+    return this.dragManager.getComponent(DragManager);
+  }
 }

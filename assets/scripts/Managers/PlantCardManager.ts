@@ -29,6 +29,7 @@ export default class PlantCardManager extends cc.Component {
   public loadPlantCards(): void {
     for (const cardPrefab of this.plantCardPrefabs) {
       const plantCard = cc.instantiate(cardPrefab);
+      plantCard.name = cardPrefab.name;
 
       this.plantCardLayer.addChild(plantCard);
       plantCard.getComponent(PlantCard).dragManager =
