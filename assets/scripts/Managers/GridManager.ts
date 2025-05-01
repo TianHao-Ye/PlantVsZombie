@@ -1,78 +1,74 @@
 import GameManager from "./GameManager";
 
-const {ccclass, property} = cc._decorator;
-
-@ccclass
-export default class GridManager extends cc.Component {
-
-    @property
-    gridWidth: number = 165.7;
-
-    @property
-    gridHeight: number = 144.17;
-
-    @property
-    startX: number = -700;
-
-    @property
-    startY: number = 400;
-
-    @property
-    rows: number = 6;
-
-    @property
-    cols: number = 7;
-
+export default class GridManager {
     private _gridData: (cc.Node | undefined)[][] = [];
- 
-    // LIFE-CYCLE CALLBACKS:
-
-    protected onLoad (): void {
-        for (let r = 0; r < this.rows; r++) {
-            this._gridData[r] = [];
-            for (let c = 0; c < this.cols; c++) {
-                this._gridData[r][c] = undefined;
-            }
+  
+    private _gridWidth: number = 0;
+    private _gridHeight: number = 0;
+    private _startX: number = 0;
+    private _startY: number = 0;
+    private _rows: number = 0;
+    private _cols: number = 0;
+    private _gameManager: GameManager = undefined;
+  
+    public init(
+      gridWidth: number,
+      gridHeight: number,
+      startX: number,
+      startY: number,
+      rows: number,
+      cols: number,
+      gameManager: GameManager
+    ): void {
+      this._gridWidth = gridWidth;
+      this._gridHeight = gridHeight;
+      this._startX = startX;
+      this._startY = startY;
+      this._rows = rows;
+      this._cols = cols;
+      this._gameManager = gameManager;
+  
+      for (let r = 0; r < rows; r++) {
+        this._gridData[r] = [];
+        for (let c = 0; c < cols; c++) {
+          this._gridData[r][c] = undefined;
         }
+      }
     }
-
-    protected start () : void {
-
-    }
-
-    // update (dt) {}
-
+  
     public _worldPosToGrid(pos: cc.Vec2): { row: number, col: number } | null {
-        const col = Math.floor((pos.x - this.startX) / this.gridWidth);
-        const row = Math.floor((this.startY - pos.y) / this.gridHeight);
-        if (row >= 0 && row < this.rows && col >= 0 && col < this.cols) {
-            return { row, col };
-        }
-        return null;
+      const col = Math.floor((pos.x - this._startX) / this._gridWidth);
+      const row = Math.floor((this._startY - pos.y) / this._gridHeight);
+      if (row >= 0 && row < this._rows && col >= 0 && col < this._cols) {
+        return { row, col };
+      }
+      return null;
     }
-
+  
     public _gridToWorldPos(row: number, col: number): cc.Vec2 {
-        const x = this.startX + col * this.gridWidth + this.gridWidth / 2;
-        const y = this.startY - row * this.gridHeight - this.gridHeight / 2;
-        return cc.v2(x, y);
+      const x = this._startX + col * this._gridWidth + this._gridWidth / 2;
+      const y = this._startY - row * this._gridHeight - this._gridHeight / 2;
+      return cc.v2(x, y);
     }
-
+  
     public canPlant(row: number, col: number): boolean {
-        return this._gridData[row][col] === undefined;
+      return this._gridData[row][col] === undefined;
     }
-
+  
     public plantAt(row: number, col: number, plantNode: cc.Node) {
-        if (this.canPlant(row, col)) {
-            this._gridData[row][col] = plantNode;
-            plantNode.setPosition(this._gridToWorldPos(row, col));
-            plantNode.parent = this.node.parent.getComponent(GameManager).plantManager;
-        }
+      if (this.canPlant(row, col)) {
+        console.log(plantNode);
+        this._gridData[row][col] = plantNode;
+        plantNode.setPosition(this._gridToWorldPos(row, col));
+        plantNode.parent = this._gameManager.getPlantManager().getPlantLayer();
+      }
     }
-
+  
     public removePlant(row: number, col: number) {
-        if (this._gridData[row][col] !== undefined) {
-            this._gridData[row][col].destroy();
-            this._gridData[row][col] = undefined;
-        }
+      if (this._gridData[row][col] !== undefined) {
+        this._gridData[row][col].destroy();
+        this._gridData[row][col] = undefined;
+      }
     }
-}
+  }
+  

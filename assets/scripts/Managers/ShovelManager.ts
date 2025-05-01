@@ -3,42 +3,39 @@ import GameManager from "./GameManager";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class ShovelManager extends cc.Component {
-  @property(cc.Node)
-  shovelIcon: cc.Node = undefined;
-
-  @property(GameManager)
-  gameManager: GameManager = undefined;
-
-  @property(cc.Node)
-  shovelLayer: cc.Node = undefined;
+export default class ShovelManager {
+  private _shovelIcon: cc.Node = null;
+  private _shovelLayer: cc.Node = null;
+  private _gameManager: GameManager = null;
 
   private _isShovelMode: boolean = false;
   private _shovelIconClone: cc.Node = undefined;
 
-  // LIFE-CYCLE CALLBACKS:
+  public init(
+    shovelIcon: cc.Node,
+    shovelLayer: cc.Node,
+    gameManager: GameManager
+  ): void {
+    this._shovelIcon = shovelIcon;
+    this._shovelLayer = shovelLayer;
+    this._gameManager = gameManager;
 
-  protected onLoad(): void {
     this._registerTouchEvents();
   }
 
-  start() {}
-
-  protected update(): void {}
-
   private _registerTouchEvents(): void {
-    this.shovelIcon.on(
+    this._shovelIcon.on(
       cc.Node.EventType.TOUCH_END,
       this._handleTouchIcon,
       this
     );
-    this.shovelLayer.on(
+    this._shovelLayer.on(
       cc.Node.EventType.MOUSE_MOVE,
       this._handleMouseMove,
       this
     );
 
-    this.shovelLayer.on(
+    this._shovelLayer.on(
       cc.Node.EventType.TOUCH_END,
       this._handleTouchGameArea,
       this
@@ -47,7 +44,6 @@ export default class ShovelManager extends cc.Component {
 
   private _handleTouchIcon(): void {
     this._toggleShovelMode();
-
   }
 
   private _toggleShovelMode(): void {
@@ -61,21 +57,21 @@ export default class ShovelManager extends cc.Component {
   private _enterShovelMode(): void {
     this._isShovelMode = true;
     this._createShovelClone();
-    this.shovelIcon.opacity = 128;
-    this.gameManager.getScriptDragManager().unregisterTouchEvents();
+    this._shovelIcon.opacity = 128;
+    this._gameManager.getDragManager().unregisterTouchEvents();
   }
 
   private _exitShovelMode(): void {
     this._isShovelMode = false;
-    this.shovelIcon.opacity = 255;
+    this._shovelIcon.opacity = 255;
     this._destroyShovelClone();
-    this.gameManager.getScriptDragManager().registerTouchEvents();
+    this._gameManager.getDragManager().registerTouchEvents();
   }
 
   private _createShovelClone(): void {
     if (this._shovelIconClone) return;
-    this._shovelIconClone = cc.instantiate(this.shovelIcon);
-    this.shovelLayer.addChild(this._shovelIconClone);
+    this._shovelIconClone = cc.instantiate(this._shovelIcon);
+    this._shovelLayer.addChild(this._shovelIconClone);
   }
 
   private _destroyShovelClone(): void {
@@ -89,9 +85,11 @@ export default class ShovelManager extends cc.Component {
     if (!this._isShovelMode) return;
 
     const mousePos = event.getLocation();
-    const localPos = this.shovelLayer.convertToNodeSpaceAR(mousePos);
+    const localPos = this._shovelLayer.convertToNodeSpaceAR(mousePos);
     this._shovelIconClone.setPosition(localPos);
   }
+
+  private;
 
   private _handleTouchGameArea(event: cc.Event.EventTouch): void {
     if (!this._isShovelMode) {
@@ -99,24 +97,19 @@ export default class ShovelManager extends cc.Component {
     }
 
     const touchPos = event.getLocation();
-    const localPos = this.shovelLayer.convertToNodeSpaceAR(touchPos);
-
-    const gridPos = this.gameManager
-      .getScriptGridManager()
+    const localPos = this._shovelLayer.convertToNodeSpaceAR(touchPos);
+    const gridPos = this._gameManager
+      .getGridManager()
       ._worldPosToGrid(localPos);
 
     //unplant
     if (
       gridPos &&
-      !this.gameManager
-        .getScriptGridManager()
-        .canPlant(gridPos.row, gridPos.col)
+      !this._gameManager.getGridManager().canPlant(gridPos.row, gridPos.col)
     ) {
-      this.gameManager
-        .getScriptGridManager()
-        .removePlant(gridPos.row, gridPos.col);
+      this._gameManager.getGridManager().removePlant(gridPos.row, gridPos.col);
       this._exitShovelMode();
-      this.gameManager.getScriptDragManager().registerTouchEvents();
+      this._gameManager.getDragManager().registerTouchEvents();
     }
   }
 }

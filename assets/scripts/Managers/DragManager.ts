@@ -1,45 +1,40 @@
 import GameManager from "./GameManager";
-import GridManager from "./GridManager";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class DragManager extends cc.Component {
-  @property(cc.Node)
-  dragLayer: cc.Node = undefined;
-
-  @property(GameManager)
-  gameManager: GameManager = undefined;
-
+export default class DragManager {
+  private _dragLayer: cc.Node = undefined;
+  private _gameManager: GameManager = undefined;
   private _draggingCard: cc.Node = undefined;
 
-  // LIFE-CYCLE CALLBACKS:
-
-  protected onLoad(): void {
-    this.registerTouchEvents();
+  public init(dragLayer: cc.Node, gameManager: GameManager): void {
+    this._dragLayer = dragLayer;
+    this._gameManager = gameManager;
   }
 
-  start() {}
-
-  // update (dt) {}
-
   public registerTouchEvents(): void {
-    this.dragLayer.on(cc.Node.EventType.TOUCH_START, this._onTouchStart, this);
-    this.dragLayer.on(cc.Node.EventType.TOUCH_MOVE, this._onTouchMove, this);
-    this.dragLayer.on(cc.Node.EventType.TOUCH_END, this._onTouchEnd, this);
+    this._dragLayer.on(cc.Node.EventType.TOUCH_START, this._onTouchStart, this);
+    this._dragLayer.on(cc.Node.EventType.TOUCH_MOVE, this._onTouchMove, this);
+    this._dragLayer.on(cc.Node.EventType.TOUCH_END, this._onTouchEnd, this);
   }
 
   public unregisterTouchEvents(): void {
-    this.dragLayer.off(cc.Node.EventType.TOUCH_START, this._onTouchStart, this);
-    this.dragLayer.off(cc.Node.EventType.TOUCH_MOVE, this._onTouchMove, this);
-    this.dragLayer.off(cc.Node.EventType.TOUCH_END, this._onTouchEnd, this);
+    this._dragLayer.off(
+      cc.Node.EventType.TOUCH_START,
+      this._onTouchStart,
+      this
+    );
+    this._dragLayer.off(cc.Node.EventType.TOUCH_MOVE, this._onTouchMove, this);
+    this._dragLayer.off(cc.Node.EventType.TOUCH_END, this._onTouchEnd, this);
   }
 
   private _onTouchStart(event: cc.Event.EventTouch): void {
     const touchPos = event.getLocation();
 
-    const plantCardLayer =
-      this.gameManager.getScriptPlantCardManager().plantCardLayer;
+    const plantCardLayer = this._gameManager
+      .getPlantCardManager()
+      .getPlantCardLayer();
 
     const card = this._getCardUnderTouch(touchPos, plantCardLayer);
     if (card) {
@@ -50,9 +45,9 @@ export default class DragManager extends cc.Component {
   private _startDragging(originCard: cc.Node): void {
     const cloneCard = cc.instantiate(originCard);
     const worldPos = originCard.convertToWorldSpaceAR(cc.Vec2.ZERO);
-    const localPos = this.dragLayer.convertToNodeSpaceAR(worldPos);
+    const localPos = this._dragLayer.convertToNodeSpaceAR(worldPos);
 
-    this.dragLayer.addChild(cloneCard);
+    this._dragLayer.addChild(cloneCard);
     cloneCard.setPosition(localPos);
     cloneCard.opacity = 100;
 
@@ -86,30 +81,29 @@ export default class DragManager extends cc.Component {
     if (!this._draggingCard) return;
 
     const touchPos = event.getLocation();
-    const localPos = this.dragLayer.convertToNodeSpaceAR(touchPos);
+    const localPos = this._dragLayer.convertToNodeSpaceAR(touchPos);
     this._draggingCard.setPosition(localPos);
   }
 
   private _onTouchEnd(event: cc.Event.EventTouch): void {
-    console.log("on drag end");
     if (!this._draggingCard) return;
 
     const touchPos = event.getLocation();
-    const localPos = this.dragLayer.convertToNodeSpaceAR(touchPos);
-    const gridPos = this.gameManager.gridManager
-      .getComponent(GridManager)
+    const localPos = this._dragLayer.convertToNodeSpaceAR(touchPos);
+    const gridPos = this._gameManager
+      .getGridManager()
       ._worldPosToGrid(localPos);
 
     if (gridPos) {
       const plantNode = cc.instantiate(
-        this.gameManager
-          .getScriptPlantManager()
+        this._gameManager
+          .getPlantManager()
           .getPlantPrefabByName(this._parsePlantName(this._draggingCard.name))
       );
 
       if (plantNode) {
-        this.gameManager
-          .getScriptGridManager()
+        this._gameManager
+          .getGridManager()
           .plantAt(gridPos.row, gridPos.col, plantNode);
       }
     }

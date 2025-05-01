@@ -7,66 +7,71 @@ import ShovelManager from "./ShovelManager";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class GameManager extends cc.Component {
-  @property(cc.Node)
-  plantManager: cc.Node = undefined;
-
-  @property(cc.Node)
-  gridManager: cc.Node = undefined;
-
-  @property(cc.Node)
-  plantCardManager: cc.Node = undefined;
-
-  @property(cc.Node)
-  dragManager: cc.Node = undefined;
-
-  @property(cc.Node)
-  uiManager: cc.Node = undefined;
-
-  @property(cc.Node)
-  shovelManager: cc.Node = undefined;
-
-  @property(cc.Node)
-  background: cc.Node = undefined;
-
-  // public init(shovelManager: ShovelManager): void {
-  //   this._shovelManager = shovelManager;
-  // }
-
+export default class GameManager {
   private _isStart: boolean = false;
-  // private _shovelManager: ShovelManager = undefined;
+  private _plantManager: PlantManager = undefined;
+  private _gridManager: GridManager = undefined;
+  private _plantCardManager: PlantCardManager = undefined;
+  private _dragManager: DragManager = undefined;
+  private _shovelManager: ShovelManager = undefined;
 
-  // LIFE-CYCLE CALLBACKS:
+  public init(
+    plantCardLayer: cc.Node,
+    zombieLayer: cc.Node,
+    plantLayer: cc.Node,
+    shovelLayer: cc.Node,
+    dragLayer: cc.Node,
+    shovelIcon: cc.Node,
+    plantPrefabs: cc.Prefab[],
+    plantCardPrefabs: cc.Prefab[],
+    gridWidth: number,
+    gridHeight: number,
+    startX: number,
+    startY: number,
+    rows: number,
+    cols: number
+  ): void {
+    this._plantManager = new PlantManager();
+    this._gridManager = new GridManager();
+    this._plantCardManager = new PlantCardManager();
+    this._dragManager = new DragManager();
+    this._shovelManager = new ShovelManager();
 
-  protected onLoad(): void {
-    // this.loadGame();
-    this.getScriptPlantCardManager().loadPlantCards();
+    this._plantManager.init(plantLayer, plantPrefabs);
+    this._gridManager.init(
+      gridWidth,
+      gridHeight,
+      startX,
+      startY,
+      rows,
+      cols,
+      this
+    );
+    this._plantCardManager.init(plantCardLayer, plantCardPrefabs);
+    this._dragManager.init(dragLayer, this);
+    this._shovelManager.init(shovelIcon, shovelLayer, this);
   }
-
-  protected start(): void {}
-
-  // update (dt) {}
 
   public loadGame(): void {
-    this._isStart = true;
-    // const playButton = this.uiNode.getChildByName("PlayButton");
-    // playButton.active = false;
-    this.getScriptPlantCardManager().loadPlantCards();
+    this._plantCardManager.loadPlantCards();
+    this._dragManager.registerTouchEvents();
+    this._plantManager.loadPlants();
   }
 
-  public getScriptPlantCardManager(): PlantCardManager {
-    return this.plantCardManager.getComponent(PlantCardManager);
+  //get managers
+  public getPlantCardManager(): PlantCardManager {
+    return this._plantCardManager;
   }
 
-  public getScriptGridManager(): GridManager {
-    return this.gridManager.getComponent(GridManager);
+  public getGridManager(): GridManager {
+    return this._gridManager;
   }
 
-  public getScriptPlantManager(): PlantManager {
-    return this.plantManager.getComponent(PlantManager);
+  public getPlantManager(): PlantManager {
+    return this._plantManager;
   }
 
-  public getScriptDragManager(): DragManager {
-    return this.dragManager.getComponent(DragManager);
+  public getDragManager(): DragManager {
+    return this._dragManager;
   }
 }

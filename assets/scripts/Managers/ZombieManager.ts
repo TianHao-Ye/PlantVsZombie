@@ -1,13 +1,7 @@
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class ZoobieManager extends cc.Component {
-  @property(cc.Label)
-  label: cc.Label = null;
-
-  @property
-  text: string = "hello";
-
+export default class ZoobieManager {
   // LIFE-CYCLE CALLBACKS:
 
   // onLoad () {}
