@@ -11,6 +11,12 @@ export default class PlantCardManager extends cc.Component {
   @property([cc.Prefab])
   plantCardPrefabs: cc.Prefab[] = [];
 
+  @property
+  minPlantCardDisplay: number = 0;
+
+  @property
+  maxPlantCardDisplay: number = 0;
+
   private _plantCardPrefabMap: { [key: string]: cc.Prefab } = {};
 
   // LIFE-CYCLE CALLBACKS:
