@@ -57,12 +57,12 @@ export default class GridManager extends cc.Component {
         return cc.v2(x, y);
     }
 
-    public _canPlant(row: number, col: number): boolean {
+    public canPlant(row: number, col: number): boolean {
         return this._gridData[row][col] === undefined;
     }
 
     public plantAt(row: number, col: number, plantNode: cc.Node) {
-        if (this._canPlant(row, col)) {
+        if (this.canPlant(row, col)) {
             this._gridData[row][col] = plantNode;
             plantNode.setPosition(this._gridToWorldPos(row, col));
             plantNode.parent = this.node.parent.getComponent(GameManager).plantManager;
@@ -70,8 +70,9 @@ export default class GridManager extends cc.Component {
     }
 
     public removePlant(row: number, col: number) {
-        if (this._gridData[row][col] !== null) {
-            this._gridData[row][col] = null;
+        if (this._gridData[row][col] !== undefined) {
+            this._gridData[row][col].destroy();
+            this._gridData[row][col] = undefined;
         }
     }
 }

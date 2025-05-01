@@ -1,7 +1,5 @@
 import GameManager from "./GameManager";
 import GridManager from "./GridManager";
-import PlantCardManager from "./PlantCardManager";
-import PlantManager from "./PlantManager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -18,29 +16,23 @@ export default class DragManager extends cc.Component {
   // LIFE-CYCLE CALLBACKS:
 
   protected onLoad(): void {
-    this._registerTouchEvents();
+    this.registerTouchEvents();
   }
 
   start() {}
 
   // update (dt) {}
 
-  private _registerTouchEvents(): void {
+  public registerTouchEvents(): void {
     this.dragLayer.on(cc.Node.EventType.TOUCH_START, this._onTouchStart, this);
     this.dragLayer.on(cc.Node.EventType.TOUCH_MOVE, this._onTouchMove, this);
     this.dragLayer.on(cc.Node.EventType.TOUCH_END, this._onTouchEnd, this);
   }
 
-  private _startDragging(originCard: cc.Node): void {
-    const cloneCard = cc.instantiate(originCard);
-    const worldPos = originCard.convertToWorldSpaceAR(cc.Vec2.ZERO);
-    const localPos = this.dragLayer.convertToNodeSpaceAR(worldPos);
-
-    this.dragLayer.addChild(cloneCard);
-    cloneCard.setPosition(localPos);
-    cloneCard.opacity = 100;
-
-    this._draggingCard = cloneCard;
+  public unregisterTouchEvents(): void {
+    this.dragLayer.off(cc.Node.EventType.TOUCH_START, this._onTouchStart, this);
+    this.dragLayer.off(cc.Node.EventType.TOUCH_MOVE, this._onTouchMove, this);
+    this.dragLayer.off(cc.Node.EventType.TOUCH_END, this._onTouchEnd, this);
   }
 
   private _onTouchStart(event: cc.Event.EventTouch): void {
@@ -53,6 +45,18 @@ export default class DragManager extends cc.Component {
     if (card) {
       this._startDragging(card);
     }
+  }
+
+  private _startDragging(originCard: cc.Node): void {
+    const cloneCard = cc.instantiate(originCard);
+    const worldPos = originCard.convertToWorldSpaceAR(cc.Vec2.ZERO);
+    const localPos = this.dragLayer.convertToNodeSpaceAR(worldPos);
+
+    this.dragLayer.addChild(cloneCard);
+    cloneCard.setPosition(localPos);
+    cloneCard.opacity = 100;
+
+    this._draggingCard = cloneCard;
   }
 
   private _getCardUnderTouch(
@@ -87,6 +91,7 @@ export default class DragManager extends cc.Component {
   }
 
   private _onTouchEnd(event: cc.Event.EventTouch): void {
+    console.log("on drag end");
     if (!this._draggingCard) return;
 
     const touchPos = event.getLocation();
@@ -97,14 +102,14 @@ export default class DragManager extends cc.Component {
 
     if (gridPos) {
       const plantNode = cc.instantiate(
-        this.gameManager.plantManager
-          .getComponent(PlantManager)
+        this.gameManager
+          .getScriptPlantManager()
           .getPlantPrefabByName(this._parsePlantName(this._draggingCard.name))
       );
 
       if (plantNode) {
-        this.gameManager.gridManager
-          .getComponent(GridManager)
+        this.gameManager
+          .getScriptGridManager()
           .plantAt(gridPos.row, gridPos.col, plantNode);
       }
     }

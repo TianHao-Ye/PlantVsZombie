@@ -2,6 +2,7 @@ import DragManager from "./DragManager";
 import GridManager from "./GridManager";
 import PlantCardManager from "./PlantCardManager";
 import PlantManager from "./PlantManager";
+import ShovelManager from "./ShovelManager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -20,12 +21,20 @@ export default class GameManager extends cc.Component {
   dragManager: cc.Node = undefined;
 
   @property(cc.Node)
-  background: cc.Node = undefined;
+  uiManager: cc.Node = undefined;
 
   @property(cc.Node)
-  uiNode: cc.Node = undefined;
+  shovelManager: cc.Node = undefined;
+
+  @property(cc.Node)
+  background: cc.Node = undefined;
+
+  // public init(shovelManager: ShovelManager): void {
+  //   this._shovelManager = shovelManager;
+  // }
 
   private _isStart: boolean = false;
+  // private _shovelManager: ShovelManager = undefined;
 
   // LIFE-CYCLE CALLBACKS:
 
