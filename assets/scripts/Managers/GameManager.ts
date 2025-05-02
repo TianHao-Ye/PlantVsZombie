@@ -41,7 +41,10 @@ export default class GameManager {
     startY: number,
     rows: number,
     cols: number,
-    uiManager: UIManager
+    shovel: cc.Node,
+    playButton: cc.Node,
+    sunLabel: cc.Label,
+    plantCardContainer: cc.Node,
   ): void {
     this._plantManager = new PlantManager();
     this._gridManager = new GridManager();
@@ -49,7 +52,7 @@ export default class GameManager {
     this._dragManager = new DragManager();
     this._shovelManager = new ShovelManager();
     this._sunManager = new SunManager();
-    this._uiManager = uiManager;
+    this._uiManager = new UIManager();
 
     this._plantManager.init(plantLayer, plantPrefabs);
     this._gridManager.init(
@@ -66,6 +69,10 @@ export default class GameManager {
     this._shovelManager.init(shovelLayer, this);
     this._sunManager.init(sunLayer);
     this._uiManager.init(
+      shovel,
+      playButton,
+      sunLabel,
+      plantCardContainer,
       this,
       this._shovelManager.toggleShovelMode.bind(this._shovelManager)
     );

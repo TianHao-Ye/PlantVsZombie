@@ -5,6 +5,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Main extends cc.Component {
+  //layers
   @property([cc.Node])
   plantCardLayer: cc.Node = undefined;
 
@@ -23,12 +24,14 @@ export default class Main extends cc.Component {
   @property(cc.Node)
   sunLayer: cc.Node = undefined;
 
+  //prefabs
   @property([cc.Prefab])
   plantPrefabs: cc.Prefab[] = [];
 
   @property([cc.Prefab])
   plantCardPrefabs: cc.Prefab[] = [];
 
+  //grid properties
   @property
   gridWidth: number = 165.7;
 
@@ -47,11 +50,20 @@ export default class Main extends cc.Component {
   @property
   cols: number = 7;
 
+  //ui elements
   @property(cc.Node)
-  uiNode: cc.Node = undefined;
+  shovel: cc.Node = undefined;
+
+  @property(cc.Node)
+  playButton: cc.Node = undefined;
+
+  @property(cc.Label)
+  sunLabel: cc.Label = undefined;
+
+  @property(cc.Node)
+  plantCardContainer: cc.Node = undefined;
 
   protected onLoad(): void {
-    const uiManager = this.uiNode.getComponent(UIManager);
     GameManager.getInstance().init(
       this.plantCardLayer,
       this.zombieLayer,
@@ -67,7 +79,10 @@ export default class Main extends cc.Component {
       this.startY,
       this.rows,
       this.cols,
-      uiManager
+      this.shovel,
+      this.playButton,
+      this.sunLabel,
+      this.plantCardContainer
     );
   }
 }

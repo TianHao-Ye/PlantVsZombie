@@ -3,36 +3,37 @@ import GameManager from "./GameManager";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class UIManager extends cc.Component {
-  @property(cc.Node)
-  shovel: cc.Node = undefined;
-
-  @property(cc.Node)
-  playButton: cc.Node = undefined;
-
-  @property(cc.Label)
-  sunLabel: cc.Label = undefined;
-
-  @property(cc.Node)
-  plantCardContainer: cc.Node = undefined;
-
+export default class UIManager {
+  public shovel: cc.Node = undefined;
+  public playButton: cc.Node = undefined;
+  public sunLabel: cc.Label = undefined;
+  public plantCardContainer: cc.Node = undefined;
   private _clickShovelCallback?: () => void = undefined;
   private _gameManager: GameManager = undefined;
 
   // LIFE-CYCLE CALLBACKS:
-  public init(gameManager: GameManager, shovelCallback?: () => void): void {
+  public init(
+    shovel: cc.Node,
+    playButton: cc.Node,
+    sunLabel: cc.Label,
+    plantCardContainer: cc.Node,
+    gameManager: GameManager,
+    shovelCallback?: () => void
+  ): void {
+    this.shovel = shovel;
+    this.playButton = playButton;
+    this.sunLabel = sunLabel;
+    this.plantCardContainer = plantCardContainer;
     this._gameManager = gameManager;
     this._clickShovelCallback = shovelCallback;
+
+    this.loadUiManager();
   }
 
-  protected onLoad(): void {
+  protected loadUiManager(): void {
     this._loadUiElements();
     this._bindShovelEvents();
   }
-
-  start() {}
-
-  // update (dt) {}
 
   private _bindShovelEvents(): void {
     this.shovel.on(cc.Node.EventType.TOUCH_END, this._onClickShovel, this);
