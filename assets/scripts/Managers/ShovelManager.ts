@@ -98,13 +98,8 @@ export default class ShovelManager {
       ._worldPosToGrid(localPos);
 
     //unplant
-    if (
-      gridPos &&
-      !this._gameManager.getGridManager().canPlant(gridPos.row, gridPos.col)
-    ) {
+    gridPos &&
+      !this._gameManager.getGridManager().canPlant(gridPos.row, gridPos.col) &&
       this._gameManager.getGridManager().removePlant(gridPos.row, gridPos.col);
-      this._exitShovelMode();
-      this._gameManager.getDragManager().registerTouchEvents();
-    }
   }
 }
