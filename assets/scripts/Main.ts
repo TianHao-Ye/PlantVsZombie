@@ -3,7 +3,7 @@ import GameManager from "./Managers/GameManager";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class Game extends cc.Component {
+export default class Main extends cc.Component {
   @property([cc.Node])
   plantCardLayer: cc.Node = undefined;
 
@@ -18,6 +18,9 @@ export default class Game extends cc.Component {
 
   @property(cc.Node)
   dragLayer: cc.Node = undefined;
+
+  @property(cc.Node)
+  sunLayer: cc.Node = undefined;
 
   @property(cc.Node)
   shovelIcon: cc.Node = undefined;
@@ -49,13 +52,12 @@ export default class Game extends cc.Component {
   private _gameManager: GameManager = undefined;
 
   protected onLoad(): void {
-    this._gameManager = new GameManager();
-    this._gameManager.init(
-      this.plantCardLayer,
+    GameManager.getInstance().init(this.plantCardLayer,
       this.zombieLayer,
       this.plantLayer,
       this.shovelLayer,
       this.dragLayer,
+      this.sunLayer,
       this.shovelIcon,
       this.plantPrefabs,
       this.plantCardPrefabs,
@@ -64,8 +66,6 @@ export default class Game extends cc.Component {
       this.startX,
       this.startY,
       this.rows,
-      this.cols
-    );
-    this._gameManager.loadGame();
+      this.cols);
   }
 }

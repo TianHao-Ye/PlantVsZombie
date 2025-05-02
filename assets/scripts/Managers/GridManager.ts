@@ -57,7 +57,7 @@ export default class GridManager {
   
     public plantAt(row: number, col: number, plantNode: cc.Node) {
       if (this.canPlant(row, col)) {
-        console.log(plantNode);
+        
         this._gridData[row][col] = plantNode;
         plantNode.setPosition(this._gridToWorldPos(row, col));
         plantNode.parent = this._gameManager.getPlantManager().getPlantLayer();
