@@ -4,31 +4,19 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class ShovelManager {
-  private _shovelIcon: cc.Node = null;
-  private _shovelLayer: cc.Node = null;
-  private _gameManager: GameManager = null;
+  private _shovelLayer: cc.Node = undefined;
+  private _gameManager: GameManager = undefined;
 
   private _isShovelMode: boolean = false;
   private _shovelIconClone: cc.Node = undefined;
 
-  public init(
-    shovelIcon: cc.Node,
-    shovelLayer: cc.Node,
-    gameManager: GameManager
-  ): void {
-    this._shovelIcon = shovelIcon;
+  public init(shovelLayer: cc.Node, gameManager: GameManager): void {
     this._shovelLayer = shovelLayer;
     this._gameManager = gameManager;
-
     this._registerTouchEvents();
   }
 
   private _registerTouchEvents(): void {
-    this._shovelIcon.on(
-      cc.Node.EventType.TOUCH_END,
-      this._handleTouchIcon,
-      this
-    );
     this._shovelLayer.on(
       cc.Node.EventType.MOUSE_MOVE,
       this._handleMouseMove,
@@ -42,11 +30,7 @@ export default class ShovelManager {
     );
   }
 
-  private _handleTouchIcon(): void {
-    this._toggleShovelMode();
-  }
-
-  private _toggleShovelMode(): void {
+  public toggleShovelMode(): void {
     if (this._isShovelMode) {
       this._exitShovelMode();
     } else {
@@ -57,20 +41,24 @@ export default class ShovelManager {
   private _enterShovelMode(): void {
     this._isShovelMode = true;
     this._createShovelClone();
-    this._shovelIcon.opacity = 128;
+    this._gameManager.getUiManager().setShovelOpacity(128);
     this._gameManager.getDragManager().unregisterTouchEvents();
   }
 
   private _exitShovelMode(): void {
     this._isShovelMode = false;
-    this._shovelIcon.opacity = 255;
+    this._gameManager.getUiManager().setShovelOpacity(255);
     this._destroyShovelClone();
     this._gameManager.getDragManager().registerTouchEvents();
   }
 
   private _createShovelClone(): void {
-    if (this._shovelIconClone) return;
-    this._shovelIconClone = cc.instantiate(this._shovelIcon);
+    if (this._shovelIconClone) {
+      return;
+    }
+    this._shovelIconClone = cc.instantiate(
+      this._gameManager.getUiManager().getShovelIcon()
+    );
     this._shovelLayer.addChild(this._shovelIconClone);
   }
 
@@ -88,8 +76,6 @@ export default class ShovelManager {
     const localPos = this._shovelLayer.convertToNodeSpaceAR(mousePos);
     this._shovelIconClone.setPosition(localPos);
   }
-
-  private;
 
   private _handleTouchGameArea(event: cc.Event.EventTouch): void {
     if (!this._isShovelMode) {

@@ -33,7 +33,6 @@ export default class GameManager {
     shovelLayer: cc.Node,
     dragLayer: cc.Node,
     sunLayer: cc.Node,
-    shovelIcon: cc.Node,
     plantPrefabs: cc.Prefab[],
     plantCardPrefabs: cc.Prefab[],
     gridWidth: number,
@@ -64,8 +63,12 @@ export default class GameManager {
     );
     this._plantCardManager.init(plantCardLayer, this, plantCardPrefabs);
     this._dragManager.init(dragLayer, this);
-    this._shovelManager.init(shovelIcon, shovelLayer, this);
+    this._shovelManager.init(shovelLayer, this);
     this._sunManager.init(sunLayer);
+    this._uiManager.init(
+      this,
+      this._shovelManager.toggleShovelMode.bind(this._shovelManager)
+    );
 
     this._loadGame();
   }
@@ -91,6 +94,10 @@ export default class GameManager {
 
   public getDragManager(): DragManager {
     return this._dragManager;
+  }
+
+  public getShovelManager(): ShovelManager {
+    return this._shovelManager;
   }
 
   public getUiManager(): UIManager {

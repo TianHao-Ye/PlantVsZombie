@@ -23,9 +23,6 @@ export default class Main extends cc.Component {
   @property(cc.Node)
   sunLayer: cc.Node = undefined;
 
-  @property(cc.Node)
-  shovelIcon: cc.Node = undefined;
-
   @property([cc.Prefab])
   plantPrefabs: cc.Prefab[] = [];
 
@@ -62,7 +59,6 @@ export default class Main extends cc.Component {
       this.shovelLayer,
       this.dragLayer,
       this.sunLayer,
-      this.shovelIcon,
       this.plantPrefabs,
       this.plantCardPrefabs,
       this.gridWidth,
