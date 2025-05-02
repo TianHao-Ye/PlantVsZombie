@@ -6,9 +6,6 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class Main extends cc.Component {
   //layers
-  @property([cc.Node])
-  plantCardLayer: cc.Node = undefined;
-
   @property(cc.Node)
   zombieLayer: cc.Node = undefined;
 
@@ -65,7 +62,6 @@ export default class Main extends cc.Component {
 
   protected onLoad(): void {
     GameManager.getInstance().init(
-      this.plantCardLayer,
       this.zombieLayer,
       this.plantLayer,
       this.shovelLayer,

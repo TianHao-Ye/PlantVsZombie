@@ -27,7 +27,6 @@ export default class GameManager {
   }
 
   public init(
-    plantCardLayer: cc.Node,
     zombieLayer: cc.Node,
     plantLayer: cc.Node,
     shovelLayer: cc.Node,
@@ -44,7 +43,7 @@ export default class GameManager {
     shovel: cc.Node,
     playButton: cc.Node,
     sunLabel: cc.Label,
-    plantCardContainer: cc.Node,
+    plantCardContainer: cc.Node
   ): void {
     this._plantManager = new PlantManager();
     this._gridManager = new GridManager();
@@ -53,7 +52,14 @@ export default class GameManager {
     this._shovelManager = new ShovelManager();
     this._sunManager = new SunManager();
     this._uiManager = new UIManager();
-
+    this._uiManager.init(
+      shovel,
+      playButton,
+      sunLabel,
+      plantCardContainer,
+      this,
+      this._shovelManager.toggleShovelMode.bind(this._shovelManager)
+    );
     this._plantManager.init(plantLayer, plantPrefabs);
     this._gridManager.init(
       gridWidth,
@@ -64,26 +70,10 @@ export default class GameManager {
       cols,
       this
     );
-    this._plantCardManager.init(plantCardLayer, this, plantCardPrefabs);
+    this._plantCardManager.init(this, plantCardPrefabs);
     this._dragManager.init(dragLayer, this);
     this._shovelManager.init(shovelLayer, this);
     this._sunManager.init(sunLayer);
-    this._uiManager.init(
-      shovel,
-      playButton,
-      sunLabel,
-      plantCardContainer,
-      this,
-      this._shovelManager.toggleShovelMode.bind(this._shovelManager)
-    );
-
-    this._loadGame();
-  }
-
-  private _loadGame(): void {
-    this._plantCardManager.loadPlantCards();
-    this._dragManager.registerTouchEvents();
-    this._plantManager.loadPlants();
   }
 
   //get managers

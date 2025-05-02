@@ -7,7 +7,7 @@ export default class UIManager {
   public shovel: cc.Node = undefined;
   public playButton: cc.Node = undefined;
   public sunLabel: cc.Label = undefined;
-  public plantCardContainer: cc.Node = undefined;
+  private _plantCardContainer: cc.Node = undefined;
   private _clickShovelCallback?: () => void = undefined;
   private _gameManager: GameManager = undefined;
 
@@ -22,7 +22,7 @@ export default class UIManager {
     this.shovel = shovel;
     this.playButton = playButton;
     this.sunLabel = sunLabel;
-    this.plantCardContainer = plantCardContainer;
+    this._plantCardContainer = plantCardContainer;
     this._gameManager = gameManager;
     this._clickShovelCallback = shovelCallback;
 
@@ -60,6 +60,6 @@ export default class UIManager {
   }
 
   public addPlantCard(cardNode: cc.Node): void {
-    this.plantCardContainer.addChild(cardNode);
+    this._plantCardContainer.addChild(cardNode);
   }
 }

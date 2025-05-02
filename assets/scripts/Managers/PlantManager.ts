@@ -9,9 +9,10 @@ export default class PlantManager {
   public init(plantLayer: cc.Node, plantPrefabs: cc.Prefab[]): void {
     this._plantLayer = plantLayer;
     this._plantPrefabs = plantPrefabs;
+    this._loadPlants();
   }
 
-  public loadPlants(): void {
+  private _loadPlants(): void {
     for (const prefab of this._plantPrefabs) {
       const name = prefab.name;
       this._plantPrefabMap[name] = prefab;

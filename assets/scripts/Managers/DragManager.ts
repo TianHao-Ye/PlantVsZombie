@@ -11,6 +11,7 @@ export default class DragManager {
   public init(dragLayer: cc.Node, gameManager: GameManager): void {
     this._dragLayer = dragLayer;
     this._gameManager = gameManager;
+    this.registerTouchEvents();
   }
 
   public registerTouchEvents(): void {
