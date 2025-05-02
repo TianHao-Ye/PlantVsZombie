@@ -30,6 +30,13 @@ export default class ShovelManager {
     );
   }
 
+  private _shovelMotion(): void {
+    cc.tween(this._shovelIconClone)
+      .to(0.2, { angle: -20 })
+      .to(0.1, { angle: 0 })
+      .start();
+  }
+
   public toggleShovelMode(): void {
     if (this._isShovelMode) {
       this._exitShovelMode();
@@ -81,9 +88,11 @@ export default class ShovelManager {
     if (!this._isShovelMode) {
       return;
     }
-
+    this._shovelMotion();
     const touchPos = event.getLocation();
     const localPos = this._shovelLayer.convertToNodeSpaceAR(touchPos);
+
+    //find pos on grid
     const gridPos = this._gameManager
       .getGridManager()
       ._worldPosToGrid(localPos);

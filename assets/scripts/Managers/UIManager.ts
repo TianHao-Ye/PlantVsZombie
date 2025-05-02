@@ -11,7 +11,6 @@ export default class UIManager {
   private _clickShovelCallback?: () => void = undefined;
   private _gameManager: GameManager = undefined;
 
-  // LIFE-CYCLE CALLBACKS:
   public init(
     shovel: cc.Node,
     playButton: cc.Node,
