@@ -1,3 +1,4 @@
+import GameScheduler from "../Functional/GameScheduler";
 import DragManager from "./DragManager";
 import GridManager from "./GridManager";
 import PlantCardManager from "./PlantCardManager";
@@ -18,6 +19,7 @@ export default class GameManager {
   private _shovelManager: ShovelManager = undefined;
   private _sunManager: SunManager = undefined;
   private _uiManager: UIManager = undefined;
+  private _gameScheduler: GameScheduler = undefined;
 
   public static getInstance(): GameManager {
     if (!this._instance) {
@@ -32,8 +34,10 @@ export default class GameManager {
     shovelLayer: cc.Node,
     dragLayer: cc.Node,
     sunLayer: cc.Node,
+    scheduleLayer: cc.Node,
     plantPrefabs: cc.Prefab[],
     plantCardPrefabs: cc.Prefab[],
+    sunPrefab: cc.Prefab,
     gridWidth: number,
     gridHeight: number,
     startX: number,
@@ -52,6 +56,9 @@ export default class GameManager {
     this._shovelManager = new ShovelManager();
     this._sunManager = new SunManager();
     this._uiManager = new UIManager();
+    this._gameScheduler = scheduleLayer.getComponent(GameScheduler);
+    console.log(this._gameScheduler);
+
     this._uiManager.init(
       shovel,
       playButton,
@@ -73,8 +80,12 @@ export default class GameManager {
     this._plantCardManager.init(this, plantCardPrefabs);
     this._dragManager.init(dragLayer, this);
     this._shovelManager.init(shovelLayer, this);
-    this._sunManager.init(sunLayer);
+    this._sunManager.init(this, sunLayer, sunPrefab);
   }
+
+  // private _loadGame(): {
+
+  // }
 
   //get managers
   public getPlantCardManager(): PlantCardManager {
@@ -99,5 +110,9 @@ export default class GameManager {
 
   public getUiManager(): UIManager {
     return this._uiManager;
+  }
+
+  public getGameScheduler(): GameScheduler {
+    return this._gameScheduler;
   }
 }

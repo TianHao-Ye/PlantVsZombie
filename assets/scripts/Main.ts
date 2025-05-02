@@ -21,12 +21,18 @@ export default class Main extends cc.Component {
   @property(cc.Node)
   sunLayer: cc.Node = undefined;
 
+  @property(cc.Node)
+  scheduleLayer: cc.Node = undefined;
+
   //prefabs
   @property([cc.Prefab])
   plantPrefabs: cc.Prefab[] = [];
 
   @property([cc.Prefab])
   plantCardPrefabs: cc.Prefab[] = [];
+
+  @property(cc.Prefab)
+  sunPrefab: cc.Prefab = undefined;
 
   //grid properties
   @property
@@ -67,8 +73,10 @@ export default class Main extends cc.Component {
       this.shovelLayer,
       this.dragLayer,
       this.sunLayer,
+      this.scheduleLayer,
       this.plantPrefabs,
       this.plantCardPrefabs,
+      this.sunPrefab,
       this.gridWidth,
       this.gridHeight,
       this.startX,

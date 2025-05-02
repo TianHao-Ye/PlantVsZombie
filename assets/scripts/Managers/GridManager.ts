@@ -72,4 +72,21 @@ export default class GridManager {
       this._gridData[row][col] = undefined;
     }
   }
+
+  public getRandomWorldPos(): cc.Vec2 {
+    const totalWidth = this._cols * this._gridWidth;
+    const totalHeight = this._rows * this._gridHeight;
+
+    const minX = this._startX;
+    const maxX = this._startX + totalWidth;
+
+    const maxY = this._startY;
+    const minY = this._startY - totalHeight;
+
+    const randomX = Math.random() * (maxX - minX) + minX;
+    const randomY = Math.random() * (maxY - minY) + minY;
+
+    return cc.v2(randomX, randomY);
+  }
+
 }
