@@ -64,6 +64,9 @@ export default class Main extends cc.Component {
   sunLabel: cc.Label = undefined;
 
   @property(cc.Node)
+  sunIcon: cc.Node = undefined;
+
+  @property(cc.Node)
   plantCardContainer: cc.Node = undefined;
 
   protected onLoad(): void {
@@ -86,6 +89,7 @@ export default class Main extends cc.Component {
       this.shovel,
       this.playButton,
       this.sunLabel,
+      this.sunIcon,
       this.plantCardContainer
     );
   }

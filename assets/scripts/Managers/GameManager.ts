@@ -47,6 +47,7 @@ export default class GameManager {
     shovel: cc.Node,
     playButton: cc.Node,
     sunLabel: cc.Label,
+    sunIcon: cc.Node,
     plantCardContainer: cc.Node
   ): void {
     this._plantManager = new PlantManager();
@@ -62,6 +63,7 @@ export default class GameManager {
       shovel,
       playButton,
       sunLabel,
+      sunIcon,
       plantCardContainer,
       this,
       this._shovelManager.toggleShovelMode.bind(this._shovelManager)

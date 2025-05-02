@@ -19,7 +19,19 @@ export default class SunManager {
     this._sunValue = 0;
     this._sunPrefab = sunPrefab;
 
+    this._registerSunEvents();
     this._startSpawningSun();
+  }
+
+  private _registerSunEvents(): void {
+    this._sunLayer.on(cc.Node.EventType.TOUCH_END, this._onTouchSun, this);
+  }
+
+  private _onTouchSun(event: cc.Event.EventTouch): void {
+    console.log("in sun");
+    const sunNode = event.target;
+    console.log("太阳被触摸了", sunNode);
+    sunNode.destroy();
   }
 
   public addSunValue(amount: number): void {

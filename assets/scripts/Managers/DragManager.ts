@@ -31,6 +31,7 @@ export default class DragManager {
   }
 
   private _onTouchStart(event: cc.Event.EventTouch): void {
+    console.log("in drag");
     const touchPos = event.getLocation();
 
     const plantCardContainer = this._gameManager.getUiManager().plantCardContainer;

@@ -85,6 +85,7 @@ export default class ShovelManager {
   }
 
   private _handleTouchGameArea(event: cc.Event.EventTouch): void {
+    console.log("in shove");
     if (!this._isShovelMode) {
       return;
     }
