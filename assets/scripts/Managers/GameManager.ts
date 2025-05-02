@@ -57,7 +57,6 @@ export default class GameManager {
     this._sunManager = new SunManager();
     this._uiManager = new UIManager();
     this._gameScheduler = scheduleLayer.getComponent(GameScheduler);
-    console.log(this._gameScheduler);
 
     this._uiManager.init(
       shovel,
