@@ -4,6 +4,7 @@ import PlantCardManager from "./PlantCardManager";
 import PlantManager from "./PlantManager";
 import ShovelManager from "./ShovelManager";
 import SunManager from "./SunManager";
+import UIManager from "./UIManager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -16,14 +17,13 @@ export default class GameManager {
   private _dragManager: DragManager = undefined;
   private _shovelManager: ShovelManager = undefined;
   private _sunManager: SunManager = undefined;
-
+  private _uiManager: UIManager = undefined;
 
   public static getInstance(): GameManager {
-    if(!this._instance){
+    if (!this._instance) {
       return new GameManager();
     }
     return this._instance;
-
   }
 
   public init(
@@ -41,7 +41,8 @@ export default class GameManager {
     startX: number,
     startY: number,
     rows: number,
-    cols: number
+    cols: number,
+    uiManager: UIManager
   ): void {
     this._plantManager = new PlantManager();
     this._gridManager = new GridManager();
@@ -49,6 +50,7 @@ export default class GameManager {
     this._dragManager = new DragManager();
     this._shovelManager = new ShovelManager();
     this._sunManager = new SunManager();
+    this._uiManager = uiManager;
 
     this._plantManager.init(plantLayer, plantPrefabs);
     this._gridManager.init(
@@ -60,7 +62,7 @@ export default class GameManager {
       cols,
       this
     );
-    this._plantCardManager.init(plantCardLayer, plantCardPrefabs);
+    this._plantCardManager.init(plantCardLayer, this, plantCardPrefabs);
     this._dragManager.init(dragLayer, this);
     this._shovelManager.init(shovelIcon, shovelLayer, this);
     this._sunManager.init(sunLayer);
@@ -89,5 +91,9 @@ export default class GameManager {
 
   public getDragManager(): DragManager {
     return this._dragManager;
+  }
+
+  public getUiManager(): UIManager {
+    return this._uiManager;
   }
 }

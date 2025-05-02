@@ -1,4 +1,5 @@
 import GameManager from "./Managers/GameManager";
+import UIManager from "./Managers/UIManager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -49,10 +50,13 @@ export default class Main extends cc.Component {
   @property
   cols: number = 7;
 
-  private _gameManager: GameManager = undefined;
+  @property(cc.Node)
+  uiNode: cc.Node = undefined;
 
   protected onLoad(): void {
-    GameManager.getInstance().init(this.plantCardLayer,
+    const uiManager = this.uiNode.getComponent(UIManager);
+    GameManager.getInstance().init(
+      this.plantCardLayer,
       this.zombieLayer,
       this.plantLayer,
       this.shovelLayer,
@@ -66,6 +70,8 @@ export default class Main extends cc.Component {
       this.startX,
       this.startY,
       this.rows,
-      this.cols);
+      this.cols,
+      uiManager
+    );
   }
 }

@@ -32,11 +32,9 @@ export default class DragManager {
   private _onTouchStart(event: cc.Event.EventTouch): void {
     const touchPos = event.getLocation();
 
-    const plantCardLayer = this._gameManager
-      .getPlantCardManager()
-      .getPlantCardLayer();
+    const plantCardContainer = this._gameManager.getUiManager().plantCardContainer;
 
-    const card = this._getCardUnderTouch(touchPos, plantCardLayer);
+    const card = this._getCardUnderTouch(touchPos, plantCardContainer);
     if (card) {
       this._startDragging(card);
     }
