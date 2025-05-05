@@ -1,3 +1,4 @@
+import Sun from "../Characters/Sun";
 import GameManager from "./GameManager";
 
 const { ccclass, property } = cc._decorator;
@@ -57,17 +58,12 @@ export default class SunManager {
 
   private _createFallingSun(): void {
     let newSun: cc.Node = cc.instantiate(this._sunPrefab);
-
     let targetPos = this._getRandomSunPosition();
     let startY = cc.winSize.height / 2 + 100;
+    
     newSun.setPosition(cc.v2(targetPos.x, startY));
     this._sunLayer.addChild(newSun);
-
-    cc.tween(newSun).to(3, { y: targetPos.y }, { easing: "linear" }).start();
-  }
-
-  private _sunFadingMotion(): void {
-    
+    newSun.getComponent(Sun).playFallMotion(targetPos);
   }
 
   private _sunCollectMotion(sun: cc.Node): void {
@@ -75,20 +71,12 @@ export default class SunManager {
       .getUiManager()
       .sunIcon.convertToWorldSpaceAR(cc.v2(0, 0));
     const localTargetPos = this._sunLayer.convertToNodeSpaceAR(worldTargetPos);
-    cc.tween(sun)
-      .to(
-        0.5,
-        { position: cc.v3(localTargetPos.x, localTargetPos.y, 0) },
-        { easing: "quadOut" }
-      )
-      .call(() => {
-        this._onSunCollected(sun);
-      })
-      .start();
+    sun
+      .getComponent(Sun)
+      .playCollectedMotion(localTargetPos, this._onSunCollected.bind(this));
   }
 
-  private _onSunCollected(sun: cc.Node): void {
-    sun.destroy();
+  private _onSunCollected(): void {
     this.addSunValue(this._unitSunValue);
     this._gameManager.getUiManager().updateSunLabel(this._sunValue);
   }
