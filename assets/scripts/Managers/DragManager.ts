@@ -11,35 +11,54 @@ export default class DragManager {
   public init(dragLayer: cc.Node, gameManager: GameManager): void {
     this._dragLayer = dragLayer;
     this._gameManager = gameManager;
-    this.registerTouchEvents();
   }
 
-  public registerTouchEvents(): void {
-    this._dragLayer.on(cc.Node.EventType.TOUCH_START, this._onTouchStart, this);
-    this._dragLayer.on(cc.Node.EventType.TOUCH_MOVE, this._onTouchMove, this);
-    this._dragLayer.on(cc.Node.EventType.TOUCH_END, this._onTouchEnd, this);
-  }
+  public onGlobalTouchStart(touchPos: cc.Vec2): boolean {
+    const uiManager = this._gameManager.getUiManager();
+    const cardContainer = uiManager.plantCardContainer;
 
-  public unregisterTouchEvents(): void {
-    this._dragLayer.off(
-      cc.Node.EventType.TOUCH_START,
-      this._onTouchStart,
-      this
-    );
-    this._dragLayer.off(cc.Node.EventType.TOUCH_MOVE, this._onTouchMove, this);
-    this._dragLayer.off(cc.Node.EventType.TOUCH_END, this._onTouchEnd, this);
-  }
-
-  private _onTouchStart(event: cc.Event.EventTouch): void {
-    console.log("in drag");
-    const touchPos = event.getLocation();
-
-    const plantCardContainer = this._gameManager.getUiManager().plantCardContainer;
-
-    const card = this._getCardUnderTouch(touchPos, plantCardContainer);
-    if (card) {
-      this._startDragging(card);
+    for (const card of cardContainer.children) {
+      if (card.getBoundingBoxToWorld().contains(touchPos)) {
+        this._startDragging(card);
+        return true;
+      }
     }
+    return false;
+  }
+
+  public onGlobalTouchMove(touchPos: cc.Vec2): void {
+    if (!this._draggingCard) return;
+
+    const localPos = this._dragLayer.convertToNodeSpaceAR(touchPos);
+    this._draggingCard.setPosition(localPos);
+  }
+
+  public onGlobalTouchEnd(touchPos: cc.Vec2): void {
+    if (!this._draggingCard) return;
+
+    const localPos = this._dragLayer.convertToNodeSpaceAR(touchPos);
+    const gridPos = this._gameManager
+      .getGridManager()
+      ._worldPosToGrid(localPos);
+
+    if (
+      gridPos &&
+      this._gameManager.getGridManager().canPlant(gridPos.row, gridPos.col)
+    ) {
+      const plantName = this._parsePlantName(this._draggingCard.name);
+      const plantPrefab = this._gameManager
+        .getPlantManager()
+        .getPlantPrefabByName(plantName);
+
+      if (plantPrefab) {
+        const plantNode = cc.instantiate(plantPrefab);
+        this._gameManager
+          .getGridManager()
+          .plantAt(gridPos.row, gridPos.col, plantNode);
+      }
+    }
+    this._draggingCard.destroy();
+    this._draggingCard = null;
   }
 
   private _startDragging(originCard: cc.Node): void {
@@ -54,61 +73,7 @@ export default class DragManager {
     this._draggingCard = cloneCard;
   }
 
-  private _getCardUnderTouch(
-    touchPos: cc.Vec2,
-    plantCardLayer: cc.Node
-  ): cc.Node | null {
-    for (const card of plantCardLayer.children) {
-      if (this._isCardUnderTouch(card, touchPos)) {
-        return card;
-      }
-    }
-    return null;
-  }
-
-  private _isCardUnderTouch(card: cc.Node, touchPos: cc.Vec2): boolean {
-    return (
-      card.getComponent("PlantCard") &&
-      card.getBoundingBoxToWorld().contains(touchPos)
-    );
-  }
-
   private _parsePlantName(originalName: string): string {
     return originalName.replace("card_", "");
-  }
-
-  private _onTouchMove(event: cc.Event.EventTouch): void {
-    if (!this._draggingCard) return;
-
-    const touchPos = event.getLocation();
-    const localPos = this._dragLayer.convertToNodeSpaceAR(touchPos);
-    this._draggingCard.setPosition(localPos);
-  }
-
-  private _onTouchEnd(event: cc.Event.EventTouch): void {
-    if (!this._draggingCard) return;
-
-    const touchPos = event.getLocation();
-    const localPos = this._dragLayer.convertToNodeSpaceAR(touchPos);
-    const gridPos = this._gameManager
-      .getGridManager()
-      ._worldPosToGrid(localPos);
-
-    if (gridPos) {
-      const plantNode = cc.instantiate(
-        this._gameManager
-          .getPlantManager()
-          .getPlantPrefabByName(this._parsePlantName(this._draggingCard.name))
-      );
-
-      if (plantNode) {
-        this._gameManager
-          .getGridManager()
-          .plantAt(gridPos.row, gridPos.col, plantNode);
-      }
-    }
-
-    this._draggingCard.destroy();
-    this._draggingCard = undefined;
   }
 }

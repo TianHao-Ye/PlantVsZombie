@@ -1,4 +1,5 @@
 import GameScheduler from "../Functional/GameScheduler";
+import TouchEventManager from "../Functional/TouchEventManager";
 import DragManager from "./DragManager";
 import GridManager from "./GridManager";
 import PlantCardManager from "./PlantCardManager";
@@ -20,6 +21,7 @@ export default class GameManager {
   private _sunManager: SunManager = undefined;
   private _uiManager: UIManager = undefined;
   private _gameScheduler: GameScheduler = undefined;
+  private _touchEventManager: TouchEventManager = undefined;
 
   public static getInstance(): GameManager {
     if (!this._instance) {
@@ -35,6 +37,7 @@ export default class GameManager {
     dragLayer: cc.Node,
     sunLayer: cc.Node,
     scheduleLayer: cc.Node,
+    touchEventLayer: cc.Node,
     plantPrefabs: cc.Prefab[],
     plantCardPrefabs: cc.Prefab[],
     sunPrefab: cc.Prefab,
@@ -58,6 +61,7 @@ export default class GameManager {
     this._sunManager = new SunManager();
     this._uiManager = new UIManager();
     this._gameScheduler = scheduleLayer.getComponent(GameScheduler);
+    this._touchEventManager = new TouchEventManager();
 
     this._uiManager.init(
       shovel,
@@ -81,7 +85,8 @@ export default class GameManager {
     this._plantCardManager.init(this, plantCardPrefabs);
     this._dragManager.init(dragLayer, this);
     this._shovelManager.init(shovelLayer, this);
-    this._sunManager.init(this, sunLayer, sunPrefab);
+    this._sunManager.init(sunLayer, sunPrefab, this);
+    this._touchEventManager.init(touchEventLayer, this);
   }
 
   // private _loadGame(): {
@@ -113,7 +118,15 @@ export default class GameManager {
     return this._uiManager;
   }
 
+  public getSunManager(): SunManager {
+    return this._sunManager;
+  }
+
   public getGameScheduler(): GameScheduler {
     return this._gameScheduler;
+  }
+
+  public getTouchEventManager(): TouchEventManager {
+    return this._touchEventManager;
   }
 }

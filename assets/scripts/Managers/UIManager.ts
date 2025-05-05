@@ -4,7 +4,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class UIManager {
-  public shovel: cc.Node = undefined;
+  public shovelButton: cc.Node = undefined;
   public playButton: cc.Node = undefined;
   public sunLabel: cc.Label = undefined;
   public sunIcon: cc.Node = undefined;
@@ -13,7 +13,7 @@ export default class UIManager {
   private _gameManager: GameManager = undefined;
 
   public init(
-    shovel: cc.Node,
+    shovelButton: cc.Node,
     playButton: cc.Node,
     sunLabel: cc.Label,
     sunIcon: cc.Node,
@@ -21,7 +21,7 @@ export default class UIManager {
     gameManager: GameManager,
     shovelCallback?: () => void
   ): void {
-    this.shovel = shovel;
+    this.shovelButton = shovelButton;
     this.playButton = playButton;
     this.sunLabel = sunLabel;
     this.sunIcon = sunIcon;
@@ -29,24 +29,19 @@ export default class UIManager {
     this._gameManager = gameManager;
     this._clickShovelCallback = shovelCallback;
 
-    this.loadUiManager();
-  }
-
-  protected loadUiManager(): void {
     this._loadUiElements();
-    this._registerShovelEvents();
   }
 
-  private _registerShovelEvents(): void {
-    this.shovel.on(cc.Node.EventType.TOUCH_END, this._onTouchShovel, this);
-  }
-
-  private _onTouchShovel(): void {
-    this._gameManager.getShovelManager().toggleShovelMode();
+  public onGlobalTouchStart(touchPos: cc.Vec2): boolean {
+    if (this.shovelButton.getBoundingBoxToWorld().contains(touchPos)) {
+      this._gameManager.getShovelManager().toggleShovelMode();
+      return true;
+    }
+    return false;
   }
 
   private _loadUiElements(): void {
-    this.shovel.active = true;
+    this.shovelButton.active = true;
     this.playButton.active = true;
     this.plantCardContainer.active = true;
     this.sunLabel.node.active = true;
@@ -54,11 +49,11 @@ export default class UIManager {
   }
 
   public setShovelOpacity(opacity: number): void {
-    this.shovel.opacity = opacity;
+    this.shovelButton.opacity = opacity;
   }
 
-  public getShovelIcon(): cc.Node {
-    return this.shovel;
+  public getShovelButton(): cc.Node {
+    return this.shovelButton;
   }
 
   public updateSunLabel(value: number): void {

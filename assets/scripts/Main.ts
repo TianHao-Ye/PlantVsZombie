@@ -24,6 +24,9 @@ export default class Main extends cc.Component {
   @property(cc.Node)
   scheduleLayer: cc.Node = undefined;
 
+  @property(cc.Node)
+  touchEventLayer: cc.Node = undefined;
+
   //prefabs
   @property([cc.Prefab])
   plantPrefabs: cc.Prefab[] = [];
@@ -77,6 +80,7 @@ export default class Main extends cc.Component {
       this.dragLayer,
       this.sunLayer,
       this.scheduleLayer,
+      this.touchEventLayer,
       this.plantPrefabs,
       this.plantCardPrefabs,
       this.sunPrefab,

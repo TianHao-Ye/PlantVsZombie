@@ -10,28 +10,28 @@ export default class SunManager {
   private _sunPrefab: cc.Prefab = undefined;
 
   public init(
-    gameManager: GameManager,
-    sunManager: cc.Node,
-    sunPrefab: cc.Prefab
+    sunLayer: cc.Node,
+    sunPrefab: cc.Prefab,
+    gameManager: GameManager
   ): void {
-    this._sunLayer = sunManager;
+    this._sunLayer = sunLayer;
+    this._sunPrefab = sunPrefab;
     this._gameManager = gameManager;
     this._sunValue = 0;
-    this._sunPrefab = sunPrefab;
 
-    this._registerSunEvents();
     this._startSpawningSun();
   }
 
-  private _registerSunEvents(): void {
-    this._sunLayer.on(cc.Node.EventType.TOUCH_END, this._onTouchSun, this);
-  }
-
-  private _onTouchSun(event: cc.Event.EventTouch): void {
-    console.log("in sun");
-    const sunNode = event.target;
-    console.log("太阳被触摸了", sunNode);
-    sunNode.destroy();
+  public onGlobalTouchStart(touchPos: cc.Vec2): boolean {
+    for (const sun of this._sunLayer.children) {
+      if (sun.getBoundingBoxToWorld().contains(touchPos)) {
+        sun.destroy();
+        this.addSunValue(25);
+        this._gameManager.getUiManager().updateSunLabel(this._sunValue);
+        return true;
+      }
+    }
+    return false;
   }
 
   public addSunValue(amount: number): void {

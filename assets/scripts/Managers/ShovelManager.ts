@@ -13,21 +13,6 @@ export default class ShovelManager {
   public init(shovelLayer: cc.Node, gameManager: GameManager): void {
     this._shovelLayer = shovelLayer;
     this._gameManager = gameManager;
-    this._registerTouchEvents();
-  }
-
-  private _registerTouchEvents(): void {
-    this._shovelLayer.on(
-      cc.Node.EventType.MOUSE_MOVE,
-      this._handleMouseMove,
-      this
-    );
-
-    this._shovelLayer.on(
-      cc.Node.EventType.TOUCH_END,
-      this._handleTouchGameArea,
-      this
-    );
   }
 
   private _shovelMotion(): void {
@@ -45,18 +30,20 @@ export default class ShovelManager {
     }
   }
 
+  public isInShovelMode(): boolean {
+    return this._isShovelMode;
+  }
+
   private _enterShovelMode(): void {
     this._isShovelMode = true;
     this._createShovelClone();
     this._gameManager.getUiManager().setShovelOpacity(128);
-    this._gameManager.getDragManager().unregisterTouchEvents();
   }
 
   private _exitShovelMode(): void {
     this._isShovelMode = false;
     this._gameManager.getUiManager().setShovelOpacity(255);
     this._destroyShovelClone();
-    this._gameManager.getDragManager().registerTouchEvents();
   }
 
   private _createShovelClone(): void {
@@ -64,7 +51,7 @@ export default class ShovelManager {
       return;
     }
     this._shovelIconClone = cc.instantiate(
-      this._gameManager.getUiManager().getShovelIcon()
+      this._gameManager.getUiManager().getShovelButton()
     );
     this._shovelLayer.addChild(this._shovelIconClone);
   }
@@ -76,31 +63,30 @@ export default class ShovelManager {
     }
   }
 
-  private _handleMouseMove(event: cc.Event.EventMouse): void {
-    if (!this._isShovelMode) return;
+  public onGlobalTouchMove(touhPos: cc.Vec2): void {
+    if (!this._isShovelMode) {
+      return;
+    }
 
-    const mousePos = event.getLocation();
-    const localPos = this._shovelLayer.convertToNodeSpaceAR(mousePos);
+    const localPos = this._shovelLayer.convertToNodeSpaceAR(touhPos);
     this._shovelIconClone.setPosition(localPos);
   }
 
-  private _handleTouchGameArea(event: cc.Event.EventTouch): void {
-    console.log("in shove");
+  public onGlobalTouchEnd(touhPos: cc.Vec2): void {
     if (!this._isShovelMode) {
       return;
     }
     this._shovelMotion();
-    const touchPos = event.getLocation();
-    const localPos = this._shovelLayer.convertToNodeSpaceAR(touchPos);
-
-    //find pos on grid
+    const localPos = this._shovelLayer.convertToNodeSpaceAR(touhPos);
     const gridPos = this._gameManager
       .getGridManager()
       ._worldPosToGrid(localPos);
 
-    //unplant
-    gridPos &&
-      !this._gameManager.getGridManager().canPlant(gridPos.row, gridPos.col) &&
+    if (
+      gridPos &&
+      !this._gameManager.getGridManager().canPlant(gridPos.row, gridPos.col)
+    ) {
       this._gameManager.getGridManager().removePlant(gridPos.row, gridPos.col);
+    }
   }
 }
