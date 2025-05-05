@@ -72,6 +72,9 @@ export default class Main extends cc.Component {
   @property(cc.Node)
   plantCardContainer: cc.Node = undefined;
 
+  @property
+  unitSunValue: number = 25;
+
   protected onLoad(): void {
     GameManager.getInstance().init(
       this.zombieLayer,
@@ -94,7 +97,8 @@ export default class Main extends cc.Component {
       this.playButton,
       this.sunLabel,
       this.sunIcon,
-      this.plantCardContainer
+      this.plantCardContainer,
+      this.unitSunValue
     );
   }
 }

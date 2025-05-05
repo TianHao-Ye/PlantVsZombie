@@ -51,7 +51,8 @@ export default class GameManager {
     playButton: cc.Node,
     sunLabel: cc.Label,
     sunIcon: cc.Node,
-    plantCardContainer: cc.Node
+    plantCardContainer: cc.Node,
+    unitSunValue: number,
   ): void {
     this._plantManager = new PlantManager();
     this._gridManager = new GridManager();
@@ -85,7 +86,7 @@ export default class GameManager {
     this._plantCardManager.init(this, plantCardPrefabs);
     this._dragManager.init(dragLayer, this);
     this._shovelManager.init(shovelLayer, this);
-    this._sunManager.init(sunLayer, sunPrefab, this);
+    this._sunManager.init(unitSunValue, sunLayer, sunPrefab, this);
     this._touchEventManager.init(touchEventLayer, this);
   }
 
