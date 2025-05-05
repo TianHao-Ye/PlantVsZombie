@@ -11,18 +11,14 @@ export default class GameScheduler extends cc.Component {
     this._gameManager = gameManager;
   }
 
-  public startSunSpawning(cb: () => void, interval: number): void {
+  public scheduleSpawningSun(cb: () => void, interval: number): void {
     this._sunSpawnCallback = cb;
-    this.schedule(this._spawnSun.bind(this), interval);
-  }
-
-  private _spawnSun(): void {
-    if (this._sunSpawnCallback) {
-      this._sunSpawnCallback();
+    if(this._sunSpawnCallback){
+      this.schedule(this._sunSpawnCallback, interval);
     }
   }
 
-  public stopSunSpawning(): void {
-    this.unschedule(this._spawnSun);
-  }
+  // public stopSunSpawning(): void {
+  //   this.unschedule(this.scheduleSpawningSun);
+  // }
 }

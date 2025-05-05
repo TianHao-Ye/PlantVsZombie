@@ -55,7 +55,7 @@ export default class SunManager {
     return this._gameManager.getGridManager().getRandomWorldPos();
   }
 
-  private _spawnSun(): void {
+  private _createFallingSun(): void {
     let newSun: cc.Node = cc.instantiate(this._sunPrefab);
 
     let targetPos = this._getRandomSunPosition();
@@ -64,6 +64,10 @@ export default class SunManager {
     this._sunLayer.addChild(newSun);
 
     cc.tween(newSun).to(3, { y: targetPos.y }, { easing: "linear" }).start();
+  }
+
+  private _sunFadingMotion(): void {
+    
   }
 
   private _sunCollectMotion(sun: cc.Node): void {
@@ -92,6 +96,6 @@ export default class SunManager {
   private _startSpawningSun(interval: number = 5): void {
     this._gameManager
       .getGameScheduler()
-      .startSunSpawning(this._spawnSun.bind(this), interval);
+      .scheduleSpawningSun(this._createFallingSun.bind(this), interval);
   }
 }

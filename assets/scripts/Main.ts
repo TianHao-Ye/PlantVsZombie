@@ -5,75 +5,75 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Main extends cc.Component {
-  //layers
+  // layers
   @property(cc.Node)
-  zombieLayer: cc.Node = undefined;
+  public zombieLayer: cc.Node = undefined;
 
   @property(cc.Node)
-  plantLayer: cc.Node = undefined;
+  public plantLayer: cc.Node = undefined;
 
   @property(cc.Node)
-  shovelLayer: cc.Node = undefined;
+  public shovelLayer: cc.Node = undefined;
 
   @property(cc.Node)
-  dragLayer: cc.Node = undefined;
+  public dragLayer: cc.Node = undefined;
 
   @property(cc.Node)
-  sunLayer: cc.Node = undefined;
+  public sunLayer: cc.Node = undefined;
 
   @property(cc.Node)
-  scheduleLayer: cc.Node = undefined;
+  public scheduleLayer: cc.Node = undefined;
 
   @property(cc.Node)
-  touchEventLayer: cc.Node = undefined;
+  public touchEventLayer: cc.Node = undefined;
 
-  //prefabs
+  // prefabs
   @property([cc.Prefab])
-  plantPrefabs: cc.Prefab[] = [];
+  public plantPrefabs: cc.Prefab[] = [];
 
   @property([cc.Prefab])
-  plantCardPrefabs: cc.Prefab[] = [];
+  public plantCardPrefabs: cc.Prefab[] = [];
 
   @property(cc.Prefab)
-  sunPrefab: cc.Prefab = undefined;
+  public sunPrefab: cc.Prefab = undefined;
 
-  //grid properties
+  // grid properties
   @property
-  gridWidth: number = 165.7;
-
-  @property
-  gridHeight: number = 144.17;
+  public gridWidth: number = 165.7;
 
   @property
-  startX: number = -720;
+  public gridHeight: number = 144.17;
 
   @property
-  startY: number = 400;
+  public startX: number = -720;
 
   @property
-  rows: number = 6;
+  public startY: number = 400;
 
   @property
-  cols: number = 7;
+  public rows: number = 6;
 
-  //ui elements
+  @property
+  public cols: number = 7;
+
+  // UI elements
   @property(cc.Node)
-  shovel: cc.Node = undefined;
+  public shovel: cc.Node = undefined;
 
   @property(cc.Node)
-  playButton: cc.Node = undefined;
+  public playButton: cc.Node = undefined;
 
   @property(cc.Label)
-  sunLabel: cc.Label = undefined;
+  public sunLabel: cc.Label = undefined;
 
   @property(cc.Node)
-  sunIcon: cc.Node = undefined;
+  public sunIcon: cc.Node = undefined;
 
   @property(cc.Node)
-  plantCardContainer: cc.Node = undefined;
+  public plantCardContainer: cc.Node = undefined;
 
   @property
-  unitSunValue: number = 25;
+  public unitSunValue: number = 25;
 
   protected onLoad(): void {
     GameManager.getInstance().init(
