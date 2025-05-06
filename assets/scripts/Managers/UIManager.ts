@@ -1,9 +1,10 @@
 import GameManager from "./GameManager";
+import { IManager } from "./IManager";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class UIManager {
+export default class UIManager implements IManager {
   public shovelButton: cc.Node = undefined;
   public playButton: cc.Node = undefined;
   public sunLabel: cc.Label = undefined;

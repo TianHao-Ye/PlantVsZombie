@@ -1,0 +1,35 @@
+import { IManager } from "../../Managers/IManager";
+import SunManager from "../../Managers/SunManager";
+import Plant from "./Plant";
+
+const { ccclass, property } = cc._decorator;
+
+@ccclass
+export default class SunFlower extends Plant {
+  private _sunManager: SunManager;
+
+  // LIFE-CYCLE CALLBACKS:
+
+  protected onLoad(): void {}
+
+  protected start(): void {}
+
+  // update (dt) {}
+
+  protected attack(): void {
+    console.log("love && peace");
+  }
+
+  protected spawnSun(): void {
+    console.log("love && peace");
+  }
+
+  public setManager(sunManager: SunManager): void {
+    console.log(sunManager);
+    this._sunManager = sunManager;
+    this._sunManager &&
+      this.schedule(() => {
+        this._sunManager.createJumpingSun(this.node.getPosition());
+      }, this.attackInterval);
+  }
+}

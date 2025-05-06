@@ -20,7 +20,6 @@ export default class Sun extends cc.Component {
     cc.tween(this.node)
       .to(3, { y: targetPos.y }, { easing: "linear" })
       .call(() => {
-        this._playJumpMotion(targetPos);
         this._playFadeMotion();
       })
       .start();
@@ -52,7 +51,7 @@ export default class Sun extends cc.Component {
       .start();
   }
 
-  private _playJumpMotion(startPos: cc.Vec2): void {
+  public playRandomJumpMotion(startPos: cc.Vec2): void {
     const height = 150;
     const jumpDirection = Math.random() < 0.5 ? -1 : 1;
     const xJumpDistance = 150;
@@ -75,6 +74,9 @@ export default class Sun extends cc.Component {
           },
         }
       )
+      .call(() => {
+        this._playFadeMotion();
+      })
       .start();
   }
 }

@@ -1,9 +1,10 @@
 import GameManager from "./GameManager";
+import { IManager } from "./IManager";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class DragManager {
+export default class DragManager implements IManager {
   private _dragLayer: cc.Node = undefined;
   private _gameManager: GameManager = undefined;
   private _draggingCard: cc.Node = undefined;

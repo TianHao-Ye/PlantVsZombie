@@ -1,6 +1,7 @@
 import GameManager from "./GameManager";
+import { IManager } from "./IManager";
 
-export default class GridManager {
+export default class GridManager implements IManager {
   private _gridData: (cc.Node | undefined)[][] = [];
 
   private _gridWidth: number = 0;

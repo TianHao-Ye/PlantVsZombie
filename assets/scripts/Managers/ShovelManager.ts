@@ -1,9 +1,10 @@
 import GameManager from "./GameManager";
+import { IManager } from "./IManager";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class ShovelManager {
+export default class ShovelManager implements IManager {
   private _shovelLayer: cc.Node = undefined;
   private _gameManager: GameManager = undefined;
 
@@ -78,15 +79,15 @@ export default class ShovelManager {
     }
     this._shovelMotion();
     const localPos = this._shovelLayer.convertToNodeSpaceAR(touhPos);
-    const gridPos = this._gameManager
-      .getGridManager()
-      .worldPosToGrid(localPos);
+    const gridPos = this._gameManager.getGridManager().worldPosToGrid(localPos);
 
     if (
       gridPos &&
       !this._gameManager.getGridManager().canPlant(gridPos.row, gridPos.col)
     ) {
-      this._gameManager.getGridManager().unplantFromGrid(gridPos.row, gridPos.col);
+      this._gameManager
+        .getGridManager()
+        .unplantFromGrid(gridPos.row, gridPos.col);
     }
   }
 }

@@ -1,6 +1,7 @@
 import GameManager from "./GameManager";
+import { IManager } from "./IManager";
 
-export default class PlantCardManager {
+export default class PlantCardManager implements IManager {
   private _gameManager: GameManager = undefined;
   private _plantCardPrefabs: cc.Prefab[] = [];
   private _plantCardPrefabMap: { [key: string]: cc.Prefab } = {};

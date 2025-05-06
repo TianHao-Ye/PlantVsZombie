@@ -1,7 +1,9 @@
+import { IManager } from "./IManager";
+
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class ZoobieManager {
+export default class ZoobieManager implements IManager {
   // LIFE-CYCLE CALLBACKS:
 
   // onLoad () {}
@@ -9,4 +11,6 @@ export default class ZoobieManager {
   start() {}
 
   // update (dt) {}
+
+  public init(...args: any[]): void {}
 }

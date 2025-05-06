@@ -1,10 +1,11 @@
 import Sun from "../Characters/Sun";
 import GameManager from "./GameManager";
+import { IManager } from "./IManager";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class SunManager {
+export default class SunManager implements IManager {
   private _unitSunValue: number = undefined;
   private _sunLayer: cc.Node = undefined;
   private _sunValue: number = undefined;
@@ -57,14 +58,26 @@ export default class SunManager {
     return this._gameManager.getGridManager().getRandomWorldPos();
   }
 
-  private _createFallingSun(): void {
-    let newSun: cc.Node = cc.instantiate(this._sunPrefab);
+  private _createRandomFallingSun(): void {
+    let newSun: cc.Node = this._createSingleSun();
     let targetPos = this._getRandomSunPosition();
     let startY = cc.winSize.height / 2 + 100;
 
     this._sunLayer.addChild(newSun);
     newSun.setPosition(cc.v2(targetPos.x, startY));
     newSun.getComponent(Sun).playFallMotion(targetPos);
+  }
+
+  public createJumpingSun(startPos: cc.Vec2): void {
+    let newSun: cc.Node = this._createSingleSun();
+
+    this._sunLayer.addChild(newSun);
+    newSun.setPosition(startPos);
+    newSun.getComponent(Sun).playRandomJumpMotion(startPos);
+  }
+
+  private _createSingleSun(): cc.Node {
+    return cc.instantiate(this._sunPrefab);
   }
 
   private _onCollectSun(sun: cc.Node): void {
@@ -85,6 +98,6 @@ export default class SunManager {
   private _startSpawningSun(interval: number = 5): void {
     this._gameManager
       .getGameScheduler()
-      .scheduleSpawningSun(this._createFallingSun.bind(this), interval);
+      .scheduleSpawningSun(this._createRandomFallingSun.bind(this), interval);
   }
 }

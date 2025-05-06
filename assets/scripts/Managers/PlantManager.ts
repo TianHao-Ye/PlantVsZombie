@@ -1,10 +1,12 @@
+import SunFlower from "../Characters/Plant/SunFlower";
 import PlantCard from "../Characters/PlantCard";
 import GameManager from "./GameManager";
+import { IManager } from "./IManager";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class PlantManager {
+export default class PlantManager implements IManager {
   private _gameManager: GameManager = undefined;
   private _plantLayer: cc.Node = undefined;
   private _plantPrefabs: cc.Prefab[] = [];
@@ -28,20 +30,35 @@ export default class PlantManager {
     }
   }
 
+  private _getManagerForPlant(plantName: string): IManager {
+    switch (plantName) {
+      case "sun_flower":
+        return this._gameManager.getSunManager();
+      default:
+        return null;
+    }
+  }
+
   public getPlantPrefabByName(name: string): cc.Prefab | null {
     return this._plantPrefabMap[name] || null;
   }
 
-  private _parsePlantCardName(originalName: string): string {
+  private _convertNamePlantCardToPlant(originalName: string): string {
     return originalName.replace("card_", "");
+  }
+
+  private _convertNamePlantCardToScript(originalName: string): string {
+    return originalName
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join("");
   }
 
   public plantOnLayer(
     gridPos: { row: number; col: number },
     plantCard: cc.Node
   ): void {
-    const plantName = this._parsePlantCardName(plantCard.name);
-
+    const plantName = this._convertNamePlantCardToPlant(plantCard.name);
     const plantPrefab = this.getPlantPrefabByName(plantName);
 
     if (!plantPrefab) {
@@ -65,5 +82,13 @@ export default class PlantManager {
 
     //mark on grid
     gridManager.plantOnGrid(gridPos.row, gridPos.col, plantNode);
+
+    //assign manager
+    const manager: IManager = this._getManagerForPlant(plantName);
+    if (manager) {
+      plantNode
+        .getComponent(this._convertNamePlantCardToScript(plantName))
+        .setManager(manager);
+    }
   }
 }

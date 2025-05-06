@@ -2,6 +2,7 @@ import GameScheduler from "../Functional/GameScheduler";
 import TouchEventManager from "../Functional/TouchEventManager";
 import DragManager from "./DragManager";
 import GridManager from "./GridManager";
+import { IManager } from "./IManager";
 import PlantCardManager from "./PlantCardManager";
 import PlantManager from "./PlantManager";
 import ShovelManager from "./ShovelManager";
@@ -11,7 +12,7 @@ import UIManager from "./UIManager";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class GameManager {
+export default class GameManager implements IManager {
   private static _instance: GameManager = undefined;
   private _plantManager: PlantManager = undefined;
   private _gridManager: GridManager = undefined;
