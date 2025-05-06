@@ -57,11 +57,11 @@ export default class WeaponManager implements IManager {
     this._weaponLayer.addChild(newWeapon);
     newWeapon.setPosition(startPos);
 
-    const weaponClass = WeaponComponentMap[weaponName];
-    if (!weaponClass) {
-      return;
-    }
-    newWeapon.getComponent(weaponClass).playFlyingHorizontalMotion();
+    // const weaponClass = WeaponComponentMap[weaponName];
+    // if (!weaponClass) {
+    //   return;
+    // }
+    // newWeapon.getComponent(weaponClass).playFlyingHorizontalMotion();
   }
 
   private _createSingleWeaponNode(weaponName: string): cc.Node {
