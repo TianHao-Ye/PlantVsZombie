@@ -5,6 +5,10 @@ import { IManager } from "./IManager";
 
 const { ccclass, property } = cc._decorator;
 
+const PlantComponentMap: { [key: string]: new () => cc.Component } = {
+  sun_flower: SunFlower,
+};
+
 @ccclass
 export default class PlantManager implements IManager {
   private _gameManager: GameManager = undefined;
@@ -85,6 +89,8 @@ export default class PlantManager implements IManager {
 
     //assign manager
     const manager: IManager = this._getManagerForPlant(plantName);
+    const plantClass = PlantComponentMap[plantName];
+    // manager && plantClass && plantNode.getComponent(plantClass).setManager(manager);
     if (manager) {
       plantNode
         .getComponent(this._convertNamePlantCardToScript(plantName))
