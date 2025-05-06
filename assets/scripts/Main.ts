@@ -27,6 +27,9 @@ export default class Main extends cc.Component {
   @property(cc.Node)
   public touchEventLayer: cc.Node = undefined;
 
+  @property(cc.Node)
+  public weaponLayer: cc.Node = undefined;
+
   // prefabs
   @property([cc.Prefab])
   public plantPrefabs: cc.Prefab[] = [];
@@ -36,6 +39,9 @@ export default class Main extends cc.Component {
 
   @property(cc.Prefab)
   public sunPrefab: cc.Prefab = undefined;
+
+  @property([cc.Prefab])
+  public weaponPrefabs: cc.Prefab[] = [];
 
   // grid properties
   @property
@@ -84,9 +90,11 @@ export default class Main extends cc.Component {
       this.sunLayer,
       this.scheduleLayer,
       this.touchEventLayer,
+      this.weaponLayer,
       this.plantPrefabs,
       this.plantCardPrefabs,
       this.sunPrefab,
+      this.weaponPrefabs,
       this.gridWidth,
       this.gridHeight,
       this.startX,

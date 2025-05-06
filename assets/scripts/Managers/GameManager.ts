@@ -8,6 +8,7 @@ import PlantManager from "./PlantManager";
 import ShovelManager from "./ShovelManager";
 import SunManager from "./SunManager";
 import UIManager from "./UIManager";
+import WeaponManager from "./WeaponManager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -23,6 +24,7 @@ export default class GameManager implements IManager {
   private _uiManager: UIManager = undefined;
   private _gameScheduler: GameScheduler = undefined;
   private _touchEventManager: TouchEventManager = undefined;
+  private _weaponManager: WeaponManager = undefined;
 
   public static getInstance(): GameManager {
     if (!this._instance) {
@@ -39,9 +41,11 @@ export default class GameManager implements IManager {
     sunLayer: cc.Node,
     scheduleLayer: cc.Node,
     touchEventLayer: cc.Node,
+    weaponLayer: cc.Node,
     plantPrefabs: cc.Prefab[],
     plantCardPrefabs: cc.Prefab[],
     sunPrefab: cc.Prefab,
+    weaponPrefabs: cc.Prefab[],
     gridWidth: number,
     gridHeight: number,
     startX: number,
@@ -64,6 +68,7 @@ export default class GameManager implements IManager {
     this._uiManager = new UIManager();
     this._gameScheduler = scheduleLayer.getComponent(GameScheduler);
     this._touchEventManager = new TouchEventManager();
+    this._weaponManager = new WeaponManager();
 
     this._uiManager.init(
       shovel,
@@ -89,6 +94,7 @@ export default class GameManager implements IManager {
     this._shovelManager.init(shovelLayer, this);
     this._sunManager.init(unitSunValue, sunLayer, sunPrefab, this);
     this._touchEventManager.init(touchEventLayer, this);
+    this._weaponManager.init(weaponLayer, weaponPrefabs, this);
   }
 
   // private _loadGame(): {
@@ -130,5 +136,9 @@ export default class GameManager implements IManager {
 
   public getTouchEventManager(): TouchEventManager {
     return this._touchEventManager;
+  }
+
+  public getWeaponManager(): WeaponManager {
+    return this._weaponManager;
   }
 }

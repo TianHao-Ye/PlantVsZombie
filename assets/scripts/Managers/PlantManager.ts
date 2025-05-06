@@ -1,3 +1,4 @@
+import PeaShooter from "../Characters/Plant/PeaShooter";
 import SunFlower from "../Characters/Plant/SunFlower";
 import PlantCard from "../Characters/PlantCard";
 import GameManager from "./GameManager";
@@ -7,6 +8,7 @@ const { ccclass, property } = cc._decorator;
 
 const PlantComponentMap: { [key: string]: new () => cc.Component } = {
   sun_flower: SunFlower,
+  pea_shooter: PeaShooter,
 };
 
 @ccclass
@@ -39,7 +41,7 @@ export default class PlantManager implements IManager {
       case "sun_flower":
         return this._gameManager.getSunManager();
       default:
-        return null;
+        return this._gameManager.getWeaponManager();
     }
   }
 
@@ -49,13 +51,6 @@ export default class PlantManager implements IManager {
 
   private _convertNamePlantCardToPlant(originalName: string): string {
     return originalName.replace("card_", "");
-  }
-
-  private _convertNamePlantCardToScript(originalName: string): string {
-    return originalName
-      .split("_")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join("");
   }
 
   public plantOnLayer(
@@ -74,9 +69,9 @@ export default class PlantManager implements IManager {
     if (!gridManager.canPlant(gridPos.row, gridPos.col)) {
       return;
     }
-    if (!sunManager.useSunValue(plantCard.getComponent(PlantCard).sunCost)) {
-      return;
-    }
+    // if (!sunManager.useSunValue(plantCard.getComponent(PlantCard).sunCost)) {
+    //   return;
+    // }
 
     // create plant node
     const plantNode = cc.instantiate(plantPrefab);
@@ -90,11 +85,8 @@ export default class PlantManager implements IManager {
     //assign manager
     const manager: IManager = this._getManagerForPlant(plantName);
     const plantClass = PlantComponentMap[plantName];
-    // manager && plantClass && plantNode.getComponent(plantClass).setManager(manager);
-    if (manager) {
-      plantNode
-        .getComponent(this._convertNamePlantCardToScript(plantName))
-        .setManager(manager);
-    }
+    manager &&
+      plantClass &&
+      plantNode.getComponent(plantClass).setManager(manager);
   }
 }

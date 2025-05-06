@@ -10,10 +10,6 @@ export default class Sun extends cc.Component {
 
   // LIFE-CYCLE CALLBACKS:
 
-  protected onLoad(): void {}
-
-  protected start(): void {}
-
   // update (dt) {}
 
   public playFallMotion(targetPos: cc.Vec2): void {
