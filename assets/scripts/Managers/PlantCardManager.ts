@@ -5,9 +5,9 @@ export default class PlantCardManager {
   private _plantCardPrefabs: cc.Prefab[] = [];
   private _plantCardPrefabMap: { [key: string]: cc.Prefab } = {};
 
-  public init(gameManager: GameManager, plantCardPrefabs: cc.Prefab[]): void {
-    this._gameManager = gameManager;
+  public init(plantCardPrefabs: cc.Prefab[], gameManager: GameManager): void {
     this._plantCardPrefabs = plantCardPrefabs;
+    this._gameManager = gameManager;
 
     for (const prefab of plantCardPrefabs) {
       const name = prefab.name;

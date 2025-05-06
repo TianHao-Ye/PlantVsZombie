@@ -5,13 +5,19 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class PlantManager {
+  private _gameManager: GameManager = undefined;
   private _plantLayer: cc.Node = undefined;
   private _plantPrefabs: cc.Prefab[] = [];
   private _plantPrefabMap: { [key: string]: cc.Prefab } = {};
 
-  public init(plantLayer: cc.Node, plantPrefabs: cc.Prefab[]): void {
+  public init(
+    plantLayer: cc.Node,
+    plantPrefabs: cc.Prefab[],
+    gameManager: GameManager
+  ): void {
     this._plantLayer = plantLayer;
     this._plantPrefabs = plantPrefabs;
+    this._gameManager = gameManager;
     this._loadPlants();
   }
 
@@ -42,8 +48,8 @@ export default class PlantManager {
       return;
     }
 
-    const gridManager = GameManager.getInstance().getGridManager();
-    const sunManager = GameManager.getInstance().getSunManager();
+    const gridManager = this._gameManager.getGridManager();
+    const sunManager = this._gameManager.getSunManager();
     if (!gridManager.canPlant(gridPos.row, gridPos.col)) {
       return;
     }

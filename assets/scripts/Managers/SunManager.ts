@@ -43,6 +43,7 @@ export default class SunManager {
   public useSunValue(amount: number): boolean {
     if (this._sunValue >= amount) {
       this._sunValue -= amount;
+      this._gameManager.getUiManager().updateSunLabel(this._sunValue);
       return true;
     }
     return false;
@@ -61,8 +62,8 @@ export default class SunManager {
     let targetPos = this._getRandomSunPosition();
     let startY = cc.winSize.height / 2 + 100;
 
-    newSun.setPosition(cc.v2(targetPos.x, startY));
     this._sunLayer.addChild(newSun);
+    newSun.setPosition(cc.v2(targetPos.x, startY));
     newSun.getComponent(Sun).playFallMotion(targetPos);
   }
 

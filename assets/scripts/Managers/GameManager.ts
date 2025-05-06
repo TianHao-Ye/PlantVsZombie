@@ -73,7 +73,7 @@ export default class GameManager {
       this,
       this._shovelManager.toggleShovelMode.bind(this._shovelManager)
     );
-    this._plantManager.init(plantLayer, plantPrefabs);
+    this._plantManager.init(plantLayer, plantPrefabs, this);
     this._gridManager.init(
       gridWidth,
       gridHeight,
@@ -83,7 +83,7 @@ export default class GameManager {
       cols,
       this
     );
-    this._plantCardManager.init(this, plantCardPrefabs);
+    this._plantCardManager.init(plantCardPrefabs, this);
     this._dragManager.init(dragLayer, this);
     this._shovelManager.init(shovelLayer, this);
     this._sunManager.init(unitSunValue, sunLayer, sunPrefab, this);
