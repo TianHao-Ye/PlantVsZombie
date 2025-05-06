@@ -2,8 +2,8 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class PlantCard extends cc.Component {
-
-  // public dragManager: cc.Node = undefined;
+  @property
+  public sunCost: number = 50;
 
   // LIFE-CYCLE CALLBACKS:
 

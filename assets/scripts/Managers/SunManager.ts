@@ -29,7 +29,7 @@ export default class SunManager {
   public onGlobalTouchStart(touchPos: cc.Vec2): boolean {
     for (const sun of this._sunLayer.children) {
       if (sun.getBoundingBoxToWorld().contains(touchPos)) {
-        this._sunCollectMotion(sun);
+        this._onCollectSun(sun);
         return true;
       }
     }
@@ -60,23 +60,23 @@ export default class SunManager {
     let newSun: cc.Node = cc.instantiate(this._sunPrefab);
     let targetPos = this._getRandomSunPosition();
     let startY = cc.winSize.height / 2 + 100;
-    
+
     newSun.setPosition(cc.v2(targetPos.x, startY));
     this._sunLayer.addChild(newSun);
     newSun.getComponent(Sun).playFallMotion(targetPos);
   }
 
-  private _sunCollectMotion(sun: cc.Node): void {
+  private _onCollectSun(sun: cc.Node): void {
     const worldTargetPos = this._gameManager
       .getUiManager()
       .sunIcon.convertToWorldSpaceAR(cc.v2(0, 0));
     const localTargetPos = this._sunLayer.convertToNodeSpaceAR(worldTargetPos);
     sun
       .getComponent(Sun)
-      .playCollectedMotion(localTargetPos, this._onSunCollected.bind(this));
+      .playCollectedMotion(localTargetPos, this._onCollectSunEvents.bind(this));
   }
 
-  private _onSunCollected(): void {
+  private _onCollectSunEvents(): void {
     this.addSunValue(this._unitSunValue);
     this._gameManager.getUiManager().updateSunLabel(this._sunValue);
   }

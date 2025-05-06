@@ -39,7 +39,7 @@ export default class GridManager {
     }
   }
 
-  public _worldPosToGrid(pos: cc.Vec2): { row: number; col: number } | null {
+  public worldPosToGrid(pos: cc.Vec2): { row: number; col: number } | null {
     const col = Math.floor((pos.x - this._startX) / this._gridWidth);
     const row = Math.floor((this._startY - pos.y) / this._gridHeight);
     if (row >= 0 && row < this._rows && col >= 0 && col < this._cols) {
@@ -48,7 +48,7 @@ export default class GridManager {
     return null;
   }
 
-  public _gridToWorldPos(row: number, col: number): cc.Vec2 {
+  public gridToWorldPos(row: number, col: number): cc.Vec2 {
     const x = this._startX + col * this._gridWidth + this._gridWidth / 2;
     const y = this._startY - row * this._gridHeight - this._gridHeight / 2;
     return cc.v2(x, y);
@@ -58,15 +58,13 @@ export default class GridManager {
     return this._gridData[row][col] === undefined;
   }
 
-  public plantAt(row: number, col: number, plantNode: cc.Node) {
+  public plantOnGrid(row: number, col: number, plantNode: cc.Node) {
     if (this.canPlant(row, col)) {
       this._gridData[row][col] = plantNode;
-      plantNode.setPosition(this._gridToWorldPos(row, col));
-      plantNode.parent = this._gameManager.getPlantManager().getPlantLayer();
     }
   }
 
-  public removePlant(row: number, col: number) {
+  public unplantFromGrid(row: number, col: number) {
     if (this._gridData[row][col] !== undefined) {
       this._gridData[row][col].destroy();
       this._gridData[row][col] = undefined;
@@ -88,5 +86,4 @@ export default class GridManager {
 
     return cc.v2(randomX, randomY);
   }
-
 }

@@ -25,7 +25,7 @@ export default class GameManager {
 
   public static getInstance(): GameManager {
     if (!this._instance) {
-      return new GameManager();
+      this._instance = new GameManager();
     }
     return this._instance;
   }
@@ -52,7 +52,7 @@ export default class GameManager {
     sunLabel: cc.Label,
     sunIcon: cc.Node,
     plantCardContainer: cc.Node,
-    unitSunValue: number,
+    unitSunValue: number
   ): void {
     this._plantManager = new PlantManager();
     this._gridManager = new GridManager();

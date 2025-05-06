@@ -37,28 +37,14 @@ export default class DragManager {
     if (!this._draggingCard) return;
 
     const localPos = this._dragLayer.convertToNodeSpaceAR(touchPos);
-    const gridPos = this._gameManager
-      .getGridManager()
-      ._worldPosToGrid(localPos);
-
-    if (
-      gridPos &&
-      this._gameManager.getGridManager().canPlant(gridPos.row, gridPos.col)
-    ) {
-      const plantName = this._parsePlantName(this._draggingCard.name);
-      const plantPrefab = this._gameManager
+    const gridPos = this._gameManager.getGridManager().worldPosToGrid(localPos);
+    gridPos &&
+      this._gameManager
         .getPlantManager()
-        .getPlantPrefabByName(plantName);
+        .plantOnLayer(gridPos, this._draggingCard);
 
-      if (plantPrefab) {
-        const plantNode = cc.instantiate(plantPrefab);
-        this._gameManager
-          .getGridManager()
-          .plantAt(gridPos.row, gridPos.col, plantNode);
-      }
-    }
     this._draggingCard.destroy();
-    this._draggingCard = null;
+    this._draggingCard = undefined;
   }
 
   private _startDragging(originCard: cc.Node): void {
@@ -71,9 +57,5 @@ export default class DragManager {
     cloneCard.opacity = 100;
 
     this._draggingCard = cloneCard;
-  }
-
-  private _parsePlantName(originalName: string): string {
-    return originalName.replace("card_", "");
   }
 }

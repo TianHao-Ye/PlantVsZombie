@@ -80,13 +80,13 @@ export default class ShovelManager {
     const localPos = this._shovelLayer.convertToNodeSpaceAR(touhPos);
     const gridPos = this._gameManager
       .getGridManager()
-      ._worldPosToGrid(localPos);
+      .worldPosToGrid(localPos);
 
     if (
       gridPos &&
       !this._gameManager.getGridManager().canPlant(gridPos.row, gridPos.col)
     ) {
-      this._gameManager.getGridManager().removePlant(gridPos.row, gridPos.col);
+      this._gameManager.getGridManager().unplantFromGrid(gridPos.row, gridPos.col);
     }
   }
 }

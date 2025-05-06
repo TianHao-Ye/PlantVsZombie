@@ -1,3 +1,6 @@
+import PlantCard from "../Characters/PlantCard";
+import GameManager from "./GameManager";
+
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -23,7 +26,38 @@ export default class PlantManager {
     return this._plantPrefabMap[name] || null;
   }
 
-  public getPlantLayer(): cc.Node {
-    return this._plantLayer;
+  private _parsePlantCardName(originalName: string): string {
+    return originalName.replace("card_", "");
+  }
+
+  public plantOnLayer(
+    gridPos: { row: number; col: number },
+    plantCard: cc.Node
+  ): void {
+    const plantName = this._parsePlantCardName(plantCard.name);
+
+    const plantPrefab = this.getPlantPrefabByName(plantName);
+
+    if (!plantPrefab) {
+      return;
+    }
+
+    const gridManager = GameManager.getInstance().getGridManager();
+    const sunManager = GameManager.getInstance().getSunManager();
+    if (!gridManager.canPlant(gridPos.row, gridPos.col)) {
+      return;
+    }
+    if (!sunManager.useSunValue(plantCard.getComponent(PlantCard).sunCost)) {
+      return;
+    }
+
+    // create plant node
+    const plantNode = cc.instantiate(plantPrefab);
+    const worldPos = gridManager.gridToWorldPos(gridPos.row, gridPos.col);
+    this._plantLayer.addChild(plantNode);
+    plantNode.setPosition(worldPos);
+
+    //mark on grid
+    gridManager.plantOnGrid(gridPos.row, gridPos.col, plantNode);
   }
 }
