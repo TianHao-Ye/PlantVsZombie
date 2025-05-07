@@ -72,6 +72,13 @@ export default class GridManager implements IManager {
     }
   }
 
+  public getRandomWorldPosY(): number {
+    const randomRow = Math.floor(Math.random() * this._rows);
+    const randomY =
+      this._startY - randomRow * this._gridHeight - this._gridHeight / 2;
+    return randomY;
+  }
+
   public getRandomWorldPos(): cc.Vec2 {
     const totalWidth = this._cols * this._gridWidth;
     const totalHeight = this._rows * this._gridHeight;

@@ -9,6 +9,7 @@ import ShovelManager from "./ShovelManager";
 import SunManager from "./SunManager";
 import UIManager from "./UIManager";
 import WeaponManager from "./WeaponManager";
+import ZoobieManager from "./ZombieManager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -25,6 +26,7 @@ export default class GameManager implements IManager {
   private _gameScheduler: GameScheduler = undefined;
   private _touchEventManager: TouchEventManager = undefined;
   private _weaponManager: WeaponManager = undefined;
+  private _zombieManager: ZoobieManager = undefined;
 
   public static getInstance(): GameManager {
     if (!this._instance) {
@@ -46,6 +48,7 @@ export default class GameManager implements IManager {
     plantCardPrefabs: cc.Prefab[],
     sunPrefab: cc.Prefab,
     weaponPrefabs: cc.Prefab[],
+    zombiePrefabs: cc.Prefab[],
     gridWidth: number,
     gridHeight: number,
     startX: number,
@@ -69,6 +72,7 @@ export default class GameManager implements IManager {
     this._gameScheduler = scheduleLayer.getComponent(GameScheduler);
     this._touchEventManager = new TouchEventManager();
     this._weaponManager = new WeaponManager();
+    this._zombieManager = new ZoobieManager();
 
     this._uiManager.init(
       shovel,
@@ -95,6 +99,7 @@ export default class GameManager implements IManager {
     this._sunManager.init(unitSunValue, sunLayer, sunPrefab, this);
     this._touchEventManager.init(touchEventLayer, this);
     this._weaponManager.init(weaponLayer, weaponPrefabs, this);
+    this._zombieManager.init(zombieLayer, zombiePrefabs, this);
   }
 
   // private _loadGame(): {
@@ -140,5 +145,9 @@ export default class GameManager implements IManager {
 
   public getWeaponManager(): WeaponManager {
     return this._weaponManager;
+  }
+
+  public getZombieManager(): ZoobieManager {
+    return this._zombieManager;
   }
 }

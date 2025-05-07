@@ -1,11 +1,12 @@
+import Entity from "./Entity";
+
 const { ccclass, property } = cc._decorator;
 
 @ccclass
-export default class Sun extends cc.Component {
+export default class Sun extends Entity {
   @property
   public lifeTime: number = 5;
 
-  private _isCollected: boolean = false;
   private _onCollectedCB: () => void;
 
   // LIFE-CYCLE CALLBACKS:
@@ -31,7 +32,7 @@ export default class Sun extends cc.Component {
           { easing: "quadOut" }
         )
         .call(() => {
-          this.node.destroy();
+          this.die();
           this._onCollectedCB();
         })
         .start();
@@ -42,7 +43,7 @@ export default class Sun extends cc.Component {
     cc.tween(this.node)
       .to(this.lifeTime, { opacity: 0.5 * this.node.opacity })
       .call(() => {
-        this.node.destroy();
+        this.die();
       })
       .start();
   }

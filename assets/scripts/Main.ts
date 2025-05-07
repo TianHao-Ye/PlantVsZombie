@@ -43,6 +43,9 @@ export default class Main extends cc.Component {
   @property([cc.Prefab])
   public weaponPrefabs: cc.Prefab[] = [];
 
+  @property([cc.Prefab])
+  public zombiePrefabs: cc.Prefab[] = [];
+
   // grid properties
   @property
   public gridWidth: number = 165.7;
@@ -95,6 +98,7 @@ export default class Main extends cc.Component {
       this.plantCardPrefabs,
       this.sunPrefab,
       this.weaponPrefabs,
+      this.zombiePrefabs,
       this.gridWidth,
       this.gridHeight,
       this.startX,

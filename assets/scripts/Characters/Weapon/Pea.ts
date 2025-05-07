@@ -2,7 +2,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Pea extends cc.Component {
-  private _flyTime: number = 10;
+//   private _flyTime: number = 10;
   private _flySpeed: number = 100;
 
   // LIFE-CYCLE CALLBACKS:

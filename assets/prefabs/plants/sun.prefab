@@ -138,6 +138,9 @@
       "__id__": 1
     },
     "_enabled": true,
+    "health": 0,
+    "damage": 0,
+    "attackInterval": 0,
     "lifeTime": 5,
     "_id": ""
   },
