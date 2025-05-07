@@ -85,6 +85,7 @@ export default class Main extends cc.Component {
   public unitSunValue: number = 25;
 
   protected onLoad(): void {
+    cc.director.getCollisionManager().enabled = true;
     GameManager.getInstance().init(
       this.zombieLayer,
       this.plantLayer,
