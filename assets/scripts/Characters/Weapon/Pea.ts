@@ -4,44 +4,39 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Pea extends cc.Component {
-  //   private _flyTime: number = 10;
-  private _flySpeed: number = 100;
+  private _flySpeed: number = 120;
+  private _damage = 20;
 
   // LIFE-CYCLE CALLBACKS:
 
-  protected update(dt: number): void {
-    if (this.node.parent) {
-      let currentX = this.node.x;
-      this.node.x += this._flySpeed * dt;
-
-      if (this.node.x > this.node.parent.width / 2) {
-        this.node.destroy();
-      }
-    }
+  protected start(): void {
+    this._playFlyingHorizontalMotion();
   }
 
   protected onCollisionEnter(other: cc.Collider, self: cc.Collider) {
     const otherNode = other.node;
     if (otherNode.group === "zombie") {
       const zombie = otherNode.getComponent(NormalZombie);
-      zombie?.takeDamage(20);
+      zombie?.takeDamage(this._damage);
 
       this.node.destroy();
     }
   }
 
-    // public playFlyingHorizontalMotion(): void {
-    //   if (!this.node.parent) {
-    //     return;
-    //   }
-    //   const targetX =
-    //     this.node.parent.getPosition().x + this.node.parent.width / 2;
+  private _playFlyingHorizontalMotion(): void {
+    if (!this.node.parent) {
+      return;
+    }
+    const startX = this.node.x;
+    const targetX = cc.winSize.width / 2 - 50;
+    const distance = targetX - startX;
+    const flyTime = Math.abs(distance / this._flySpeed);
 
-    //   cc.tween(this.node)
-    //     .to(this._flyTime, { x: targetX }, { easing: "linear" })
-    //     .call(() => {
-    //       this.node.destroy();
-    //     })
-    //     .start();
-    // }
+    cc.tween(this.node)
+      .to(flyTime, { x: targetX }, { easing: "linear" })
+      .call(() => {
+        this.node.destroy();
+      })
+      .start();
+  }
 }

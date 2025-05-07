@@ -11,6 +11,7 @@ export default class SunManager implements IManager {
   private _sunValue: number = undefined;
   private _gameManager: GameManager = undefined;
   private _sunPrefab: cc.Prefab = undefined;
+  private _sunIconPos: cc.Vec2 = undefined;
 
   public init(
     unitSunValue: number,
@@ -24,6 +25,7 @@ export default class SunManager implements IManager {
     this._gameManager = gameManager;
     this._sunValue = 0;
 
+    this._setSunIconPos();
     this._startSpawningSun();
   }
 
@@ -80,14 +82,20 @@ export default class SunManager implements IManager {
     return cc.instantiate(this._sunPrefab);
   }
 
-  private _onCollectSun(sun: cc.Node): void {
+  private _setSunIconPos(): void {
     const worldTargetPos = this._gameManager
       .getUiManager()
       .sunIcon.convertToWorldSpaceAR(cc.v2(0, 0));
-    const localTargetPos = this._sunLayer.convertToNodeSpaceAR(worldTargetPos);
+    this._sunIconPos = this._sunLayer.convertToNodeSpaceAR(worldTargetPos);
+  }
+
+  private _onCollectSun(sun: cc.Node): void {
     sun
       .getComponent(Sun)
-      .playCollectedMotion(localTargetPos, this._onCollectSunEvents.bind(this));
+      .playCollectedMotion(
+        this._sunIconPos,
+        this._onCollectSunEvents.bind(this)
+      );
   }
 
   private _onCollectSunEvents(): void {

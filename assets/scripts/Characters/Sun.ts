@@ -51,9 +51,9 @@ export default class Sun extends Entity {
   public playRandomJumpMotion(startPos: cc.Vec2): void {
     const height = 150;
     const jumpDirection = Math.random() < 0.5 ? -1 : 1;
-    const xJumpDistance = 150;
+    const JumpDistanceX = 150;
     const endPos = cc.v3(
-      startPos.x + jumpDirection * xJumpDistance,
+      startPos.x + jumpDirection * JumpDistanceX,
       startPos.y,
       0
     );
