@@ -83,7 +83,7 @@ export default class ShovelManager implements IManager {
 
     if (
       gridPos &&
-      !this._gameManager.getGridManager().canPlant(gridPos.row, gridPos.col)
+      !this._gameManager.getGridManager().isOccupied(gridPos.row, gridPos.col)
     ) {
       this._gameManager
         .getGridManager()

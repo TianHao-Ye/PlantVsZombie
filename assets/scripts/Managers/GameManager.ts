@@ -102,9 +102,9 @@ export default class GameManager implements IManager {
     this._zombieManager.init(zombieLayer, zombiePrefabs, this);
   }
 
-  // private _loadGame(): {
-
-  // }
+  public update(dt: number): void {
+    this._zombieManager.update(dt);
+  }
 
   //get managers
   public getPlantCardManager(): PlantCardManager {

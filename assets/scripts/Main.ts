@@ -114,4 +114,8 @@ export default class Main extends cc.Component {
       this.unitSunValue
     );
   }
+
+  protected update(dt: number): void {
+    GameManager.getInstance().update(dt);
+  }
 }

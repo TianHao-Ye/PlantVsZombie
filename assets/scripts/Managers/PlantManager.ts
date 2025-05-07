@@ -66,7 +66,7 @@ export default class PlantManager implements IManager {
 
     const gridManager = this._gameManager.getGridManager();
     const sunManager = this._gameManager.getSunManager();
-    if (!gridManager.canPlant(gridPos.row, gridPos.col)) {
+    if (!gridManager.isOccupied(gridPos.row, gridPos.col)) {
       return;
     }
     // if (!sunManager.useSunValue(plantCard.getComponent(PlantCard).sunCost)) {

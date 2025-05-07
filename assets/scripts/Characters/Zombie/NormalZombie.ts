@@ -6,26 +6,28 @@ const { ccclass, property } = cc._decorator;
 export default class NormalZombie extends Entity {
   @property
   public walkingSpeed = 0.02;
+  private _walkTween: cc.Tween = undefined;
+
+  private _targetX = (-1 * cc.winSize.width) / 2 + 100;
 
   // LIFE-CYCLE CALLBACKS:
 
-  // onCollisionEnter(other: cc.Collider, self: cc.Collider) {
-  //   if (other.node.group === "weapon") {
-  //     const bullet = other.node.getComponent("Pea");
-  //     if (bullet) {
-  //       this.takeDamage(20);
-  //       bullet.node.destroy();
-  //     }
-  //   }
-  // }
+  protected start(): void {
+    this._playWalkingMotion();
+  }
 
-  public playWalkingMotion(): void {
-    const targetX = (-1 * cc.winSize.width) / 2 + 100;
-    cc.tween(this.node)
-      .to(1 / this.walkingSpeed, { x: targetX })
+  private _playWalkingMotion(): void {
+    this._walkTween = cc.tween(this.node)
+      .to(1 / this.walkingSpeed, { x: this._targetX })
       .call(() => {
         this.die();
       })
       .start();
+  }
+  public stopWalking(): void {
+    if (this._walkTween) {
+      this._walkTween.stop();
+      this._walkTween = undefined;
+    }
   }
 }

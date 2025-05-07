@@ -55,12 +55,16 @@ export default class GridManager implements IManager {
     return cc.v2(x, y);
   }
 
-  public canPlant(row: number, col: number): boolean {
+  public isOccupied(row: number, col: number): boolean {
     return this._gridData[row][col] === undefined;
   }
 
+  public getNodeOnGrid(row: number, col: number): cc.Node | undefined {
+    return this._gridData[row][col];
+  }
+
   public plantOnGrid(row: number, col: number, plantNode: cc.Node) {
-    if (this.canPlant(row, col)) {
+    if (this.isOccupied(row, col)) {
       this._gridData[row][col] = plantNode;
     }
   }
