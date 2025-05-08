@@ -57,7 +57,7 @@ export default class ZoobieManager implements IManager {
     }
     // this._activeZombies.delete(zombie);
     // zombie.destroy();
-    zombie.getComponent(NormalZombie).stopWalking();
+    zombie.getComponent(NormalZombie).playAttackMotion();
   }
 
   public getZombiePrefabByName(name: string): cc.Prefab | null {
