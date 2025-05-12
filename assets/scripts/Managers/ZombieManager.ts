@@ -4,6 +4,13 @@ import { IManager } from "./IManager";
 
 const { ccclass, property } = cc._decorator;
 
+export enum ZombieState {
+  Idle,
+  Walking,
+  Attacking,
+  Dead,
+}
+
 @ccclass
 export default class ZoobieManager implements IManager {
   private _zombieLayer: cc.Node = undefined;

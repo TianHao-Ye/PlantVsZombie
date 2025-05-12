@@ -139,6 +139,7 @@
     },
     "_enabled": true,
     "health": 100,
+    "damage": 10,
     "attackInterval": 2,
     "_id": ""
   },

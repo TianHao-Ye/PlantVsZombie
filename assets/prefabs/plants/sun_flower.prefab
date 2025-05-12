@@ -141,7 +141,6 @@
     "health": 100,
     "damage": 0,
     "attackInterval": 5,
-    "initHealth": 200,
     "_id": ""
   },
   {
