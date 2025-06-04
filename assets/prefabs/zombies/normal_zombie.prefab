@@ -144,7 +144,7 @@
     "health": 100,
     "damage": 10,
     "attackInterval": 1.5,
-    "walkingSpeed": 0.02,
+    "walkingSpeed": 1,
     "_id": ""
   },
   {

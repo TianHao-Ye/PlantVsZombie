@@ -1,3 +1,4 @@
+import Plant from "../Characters/Plant/Plant";
 import NormalZombie from "../Characters/Zombie/NormalZombie";
 import GameManager from "./GameManager";
 import { IManager } from "./IManager";
@@ -11,13 +12,16 @@ export enum ZombieState {
   Dead,
 }
 
+const ZoombieScriptMap: { [key: string]: string } = {
+  normal_zombie: "NormalZombie",
+};
+
 @ccclass
 export default class ZoobieManager implements IManager {
   private _zombieLayer: cc.Node = undefined;
   private _zombiePrefabs: cc.Prefab[] = undefined;
   private _gameManager: GameManager = undefined;
   private _zombiePrefabMap: { [key: string]: cc.Prefab } = {};
-  private _activeZombies: Set<cc.Node> = undefined;
 
   public init(
     zombieLayer: cc.Node,
@@ -34,37 +38,45 @@ export default class ZoobieManager implements IManager {
     }
 
     this._startSpawningZombie();
-    this._activeZombies = new Set();
   }
 
   public update(dt: number): void {
-    this._activeZombies.forEach((zombie) => {
-      if (!cc.isValid(zombie)) {
-        this._activeZombies.delete(zombie);
-        return;
-      }
-      this._checkAttack(zombie);
+    const activeZombies = this._zombieLayer.children;
+    activeZombies.forEach((zombieNode) => {
+      const zoombieScriptName = ZoombieScriptMap[zombieNode.name];
+      const zoombieScript = zombieNode.getComponent(zoombieScriptName);
+
+      const isZombieLive = zoombieScript.checkNaturalDeath();
+      isZombieLive && this._checkAttack(zombieNode);
     });
   }
 
-  private _checkAttack(zombie: cc.Node) {
-    const zombiePos = zombie.getPosition();
-    const gridPos = this._gameManager
-      .getGridManager()
-      .worldPosToGrid(zombiePos);
-    if (!gridPos) {
-      return;
-    }
+  private _checkAttack(zombieNode: cc.Node) {
+    const gridManager = this._gameManager.getGridManager();
+    const plantManager = this._gameManager.getPlantManager();
+    const zoombieScriptName = ZoombieScriptMap[zombieNode.name];
+    const zoombieScript = zombieNode.getComponent(zoombieScriptName);
 
-    const plantNode = this._gameManager
-      .getGridManager()
-      .getNodeOnGrid(gridPos.row, gridPos.col);
-    if (!plantNode) {
+    const zombiePos = zombieNode.getPosition();
+    //check zombie on grid
+    const zombieOnGridPos = gridManager.worldPosToGrid(zombiePos);
+    if (!zombieOnGridPos) {
       return;
     }
-    // this._activeZombies.delete(zombie);
-    // zombie.destroy();
-    zombie.getComponent(NormalZombie).playAttackMotion();
+    //check plant on grid
+    const plantNode = gridManager.getNodeOnGrid(
+      zombieOnGridPos.row,
+      zombieOnGridPos.col
+    );
+
+    if (!plantNode) {
+      zoombieScript._playWalkingMotion();
+      return;
+    } else {
+      const zoombieDamage = zoombieScript.getDamage();
+      zoombieScript.playAttackMotion();
+      plantManager.handleAttack(plantNode, zombieOnGridPos, zoombieDamage);
+    }
   }
 
   public getZombiePrefabByName(name: string): cc.Prefab | null {
@@ -75,7 +87,6 @@ export default class ZoobieManager implements IManager {
     const zombiePrefab = this.getZombiePrefabByName(zombieName);
     if (zombiePrefab) {
       const newZombie = cc.instantiate(zombiePrefab);
-      this._activeZombies.add(newZombie);
       return newZombie;
     }
     return null;

@@ -1,4 +1,6 @@
+import Entity from "../Characters/Entity";
 import PeaShooter from "../Characters/Plant/PeaShooter";
+import Plant from "../Characters/Plant/Plant";
 import SunFlower from "../Characters/Plant/SunFlower";
 import PlantCard from "../Characters/PlantCard";
 import GameManager from "./GameManager";
@@ -6,9 +8,9 @@ import { IManager } from "./IManager";
 
 const { ccclass, property } = cc._decorator;
 
-const PlantComponentMap: { [key: string]: new () => cc.Component } = {
-  sun_flower: SunFlower,
-  pea_shooter: PeaShooter,
+const PlantScriptMap: { [key: string]: string } = {
+  sun_flower: "SunFlower",
+  pea_shooter: "PeaShooter",
 };
 
 @ccclass
@@ -36,7 +38,7 @@ export default class PlantManager implements IManager {
     }
   }
 
-  private _getManagerForPlant(plantName: string): IManager {
+  private _getWeaponManagerForPlant(plantName: string): IManager {
     switch (plantName) {
       case "sun_flower":
         return this._gameManager.getSunManager();
@@ -52,6 +54,23 @@ export default class PlantManager implements IManager {
   private _convertNamePlantCardToPlant(originalName: string): string {
     return originalName.replace("card_", "");
   }
+
+  public handleAttack(
+    plantNode: cc.Node,
+    zombieOnGridPos: { row: number; col: number },
+    dmg: number
+  ): void {
+    const plantScriptName = PlantScriptMap[plantNode.name];
+    const plantScript = plantNode.getComponent(plantScriptName);
+    const plantLive = plantScript.takeDamage(dmg);
+    console.log(plantLive);
+    !plantLive &&
+      this._gameManager
+        .getGridManager()
+        .unplantFromGrid(zombieOnGridPos.row, zombieOnGridPos.col);
+  }
+
+  public unplantFromLayer(): void {}
 
   public plantOnLayer(
     gridPos: { row: number; col: number },
@@ -83,10 +102,10 @@ export default class PlantManager implements IManager {
     gridManager.plantOnGrid(gridPos.row, gridPos.col, plantNode);
 
     //assign manager
-    const manager: IManager = this._getManagerForPlant(plantName);
-    const plantClass = PlantComponentMap[plantName];
+    const manager: IManager = this._getWeaponManagerForPlant(plantName);
+    const plantScript = PlantScriptMap[plantName];
     manager &&
-      plantClass &&
-      plantNode.getComponent(plantClass).setManager(manager);
+      plantScript &&
+      plantNode.getComponent(plantScript).setManager(manager);
   }
 }

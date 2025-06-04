@@ -18,5 +18,4 @@ export default class SunFlower extends Plant {
       this._sunManager.createJumpingSun(this.node.getPosition());
     }, this.attackInterval);
   }
-
 }
