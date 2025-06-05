@@ -6,7 +6,7 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class NormalZombie extends Entity {
   @property
-  public walkSpeed = 1;
+  public walkSpeed = 20;
 
   private _currentState: ZombieState = undefined;
   private _currentAnimation: cc.Tween = undefined;

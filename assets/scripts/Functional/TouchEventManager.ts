@@ -47,6 +47,7 @@ export default class TouchEventLayer {
       this._onTouchEnd,
       this
     );
+    this._activeTouchHandler = undefined;
   }
 
   private _onTouchStart(event: cc.Event.EventTouch): void {

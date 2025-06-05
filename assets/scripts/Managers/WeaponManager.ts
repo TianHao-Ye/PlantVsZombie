@@ -8,8 +8,8 @@ const PlantWeaponMap: { [key: string]: string } = {
   pea_shooter: "pea",
 };
 
-const WeaponComponentMap: { [key: string]: new () => cc.Component } = {
-  pea: Pea,
+const WeaponScriptMap: { [key: string]: string } = {
+  pea: "Pea",
 };
 
 @ccclass
@@ -32,6 +32,14 @@ export default class WeaponManager implements IManager {
       const name = prefab.name;
       this._weaponPrefabMap[name] = prefab;
     }
+  }
+
+  public endGame(): void {
+    this._weaponLayer.children.forEach((weaponNode) => {
+      const weaponScriptName = WeaponScriptMap[weaponNode.name];
+      const weaponScript = weaponNode.getComponent(weaponScriptName);
+      weaponScript && weaponScript.die();
+    });
   }
 
   public getWeaponPrefabByName(name: string): cc.Prefab | null {

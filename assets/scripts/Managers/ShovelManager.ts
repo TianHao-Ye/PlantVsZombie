@@ -22,6 +22,7 @@ export default class ShovelManager implements IManager {
       this._shovelIconClone.destroy();
       this._shovelIconClone = undefined;
     }
+    this._exitShovelMode();
   }
 
   private _shovelMotion(): void {
