@@ -1,5 +1,6 @@
 import Plant from "../Characters/Plant/Plant";
 import NormalZombie from "../Characters/Zombie/NormalZombie";
+import { GameSettings } from "../Settings/GameSetting";
 import GameManager from "./GameManager";
 import { IManager } from "./IManager";
 
@@ -100,7 +101,8 @@ export default class ZoobieManager implements IManager {
   private _createRandomZombie(): void {
     let newZombie: cc.Node = this._createSingleZombieNode("normal_zombie");
     const startY = this._getRandomZombiePosY();
-    const startX = cc.winSize.width / 2 - 100;
+    const startX = GameSettings.getZombieSpawnX();
+
     this._zombieLayer.addChild(newZombie);
     newZombie.setPosition(cc.v2(startX, startY));
   }

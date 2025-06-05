@@ -1,5 +1,6 @@
 import Entity from "../Entity";
 import { ZombieState } from "../../Managers/ZombieManager";
+import { GameSettings } from "../../Settings/GameSetting";
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -10,8 +11,6 @@ export default class NormalZombie extends Entity {
   private _currentState: ZombieState = undefined;
   private _currentAnimation: cc.Tween = undefined;
 
-  private _targetX = (-1 * cc.winSize.width) / 2 + 100;
-
   // LIFE-CYCLE CALLBACKS:
 
   protected start(): void {
@@ -19,7 +18,7 @@ export default class NormalZombie extends Entity {
     this._playWalkingMotion();
   }
   public checkNaturalDeath(): boolean {
-    if (this.node.x == this._targetX) {
+    if (this.node.x == GameSettings.getZombieEndX()) {
       this.die();
       return false;
     }

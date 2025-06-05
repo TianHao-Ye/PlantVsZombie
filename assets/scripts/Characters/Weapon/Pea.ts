@@ -1,12 +1,13 @@
 import { ZoombieScriptMap } from "../../Managers/ZombieManager";
+import { GameSettings } from "../../Settings/GameSetting";
 
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Pea extends cc.Component {
-  private _flySpeed: number = 120;
+  private _flySpeed: number = 150;
   private _damage = 20;
-  private _targetX = cc.winSize.width / 2 - 50;
+  private _targetX = GameSettings.getBulletEndX();
 
   // LIFE-CYCLE CALLBACKS:
 
