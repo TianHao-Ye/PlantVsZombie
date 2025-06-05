@@ -60,7 +60,7 @@ export default class GameManager implements IManager {
     sunLabel: cc.Label,
     sunIcon: cc.Node,
     plantCardContainer: cc.Node,
-    unitSunValue: number
+    zombiesWonLabel: cc.Node
   ): void {
     this._plantManager = new PlantManager();
     this._gridManager = new GridManager();
@@ -80,6 +80,7 @@ export default class GameManager implements IManager {
       sunLabel,
       sunIcon,
       plantCardContainer,
+      zombiesWonLabel,
       this,
       this._shovelManager.toggleShovelMode.bind(this._shovelManager)
     );
@@ -96,10 +97,29 @@ export default class GameManager implements IManager {
     this._plantCardManager.init(plantCardPrefabs, this);
     this._dragManager.init(dragLayer, this);
     this._shovelManager.init(shovelLayer, this);
-    this._sunManager.init(unitSunValue, sunLayer, sunPrefab, this);
+    this._sunManager.init(sunLayer, sunPrefab, this);
     this._touchEventManager.init(touchEventLayer, this);
     this._weaponManager.init(weaponLayer, weaponPrefabs, this);
     this._zombieManager.init(zombieLayer, zombiePrefabs, this);
+  }
+
+  public playGame(): void {
+    this._uiManager.playGame();
+    this._plantCardManager.playGame();
+    this._sunManager.playGame();
+    this._touchEventManager.playGame();
+    this._zombieManager.playGame();
+  }
+
+  public endGame(): void {
+    this._uiManager.endGame();
+    this._gameScheduler.stopAll();
+    this._sunManager.endGame();
+    this._zombieManager.endGame();
+    this._plantManager.endGame();
+    this._gridManager.endGame();
+    this._shovelManager.endGame();
+    this._touchEventManager.endGame();
   }
 
   public update(dt: number): void {

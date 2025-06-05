@@ -10,6 +10,7 @@ export default class UIManager implements IManager {
   public sunLabel: cc.Label = undefined;
   public sunIcon: cc.Node = undefined;
   public plantCardContainer: cc.Node = undefined;
+  public zombiesWonLabel: cc.Node = undefined;
   private _clickShovelCallback?: () => void = undefined;
   private _gameManager: GameManager = undefined;
 
@@ -19,6 +20,7 @@ export default class UIManager implements IManager {
     sunLabel: cc.Label,
     sunIcon: cc.Node,
     plantCardContainer: cc.Node,
+    zombiesWonLabel: cc.Node,
     gameManager: GameManager,
     shovelCallback?: () => void
   ): void {
@@ -27,10 +29,29 @@ export default class UIManager implements IManager {
     this.sunLabel = sunLabel;
     this.sunIcon = sunIcon;
     this.plantCardContainer = plantCardContainer;
+    this.zombiesWonLabel = zombiesWonLabel;
     this._gameManager = gameManager;
     this._clickShovelCallback = shovelCallback;
+    this.playButton.active = true;
+  }
 
-    this._loadUiElements();
+  public playGame(): void {
+    this.playButton.active = false;
+    this.shovelButton.active = true;
+    this.plantCardContainer.active = true;
+    this.sunLabel.node.active = true;
+    this.sunIcon.active = true;
+    this.zombiesWonLabel.active = false;
+  }
+
+  public endGame(): void {
+    this.shovelButton.active = false;
+    this.plantCardContainer.active = false;
+    this.sunLabel.node.active = false;
+    this.sunIcon.active = false;
+    this.zombiesWonLabel.active = true;
+    this.clearPlantCard();
+    this.updateSunLabel(0);
   }
 
   public onGlobalTouchStart(touchPos: cc.Vec2): boolean {
@@ -39,14 +60,6 @@ export default class UIManager implements IManager {
       return true;
     }
     return false;
-  }
-
-  private _loadUiElements(): void {
-    this.shovelButton.active = true;
-    this.playButton.active = true;
-    this.plantCardContainer.active = true;
-    this.sunLabel.node.active = true;
-    this.sunIcon.active = true;
   }
 
   public setShovelOpacity(opacity: number): void {
@@ -63,5 +76,9 @@ export default class UIManager implements IManager {
 
   public addPlantCard(cardNode: cc.Node): void {
     this.plantCardContainer.addChild(cardNode);
+  }
+
+  public clearPlantCard(): void {
+    this.plantCardContainer.removeAllChildren();
   }
 }

@@ -11,7 +11,9 @@ export default class TouchEventLayer {
   public init(touchEventLayer: cc.Node, gameManager: GameManager): void {
     this._gameManager = gameManager;
     this._touchEventLayer = touchEventLayer;
+  }
 
+  public playGame(): void {
     this._touchEventLayer.on(
       cc.Node.EventType.TOUCH_START,
       this._onTouchStart,
@@ -23,6 +25,24 @@ export default class TouchEventLayer {
       this
     );
     this._touchEventLayer.on(
+      cc.Node.EventType.TOUCH_END,
+      this._onTouchEnd,
+      this
+    );
+  }
+
+  public endGame(): void {
+    this._touchEventLayer.off(
+      cc.Node.EventType.TOUCH_START,
+      this._onTouchStart,
+      this
+    );
+    this._touchEventLayer.off(
+      cc.Node.EventType.MOUSE_MOVE,
+      this._onTouchMove,
+      this
+    );
+    this._touchEventLayer.off(
       cc.Node.EventType.TOUCH_END,
       this._onTouchEnd,
       this
@@ -68,7 +88,6 @@ export default class TouchEventLayer {
         this._gameManager.getDragManager().onGlobalTouchMove(touchPos);
         break;
       case "shovel":
-        console.log(this._activeTouchHandler);
         this._gameManager.getShovelManager().onGlobalTouchMove(touchPos);
         break;
     }

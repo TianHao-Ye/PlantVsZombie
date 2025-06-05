@@ -14,10 +14,9 @@ export default class PlantCardManager implements IManager {
       const name = prefab.name;
       this._plantCardPrefabMap[name] = prefab;
     }
-    this._loadPlantCards();
   }
 
-  private _loadPlantCards(): void {
+  public playGame() {
     for (const cardPrefab of this._plantCardPrefabs) {
       const plantCard = cc.instantiate(cardPrefab);
       plantCard.name = cardPrefab.name;

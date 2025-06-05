@@ -38,6 +38,14 @@ export default class PlantManager implements IManager {
     }
   }
 
+  public endGame(): void {
+    this._plantLayer.children.forEach((plantNode) => {
+      const plantScriptName = PlantScriptMap[plantNode.name];
+      const plantScript = plantNode.getComponent(plantScriptName);
+      plantScript && plantScript.die();
+    });
+  }
+
   private _getWeaponManagerForPlant(plantName: string): IManager {
     switch (plantName) {
       case "sun_flower":
@@ -68,8 +76,6 @@ export default class PlantManager implements IManager {
         .getGridManager()
         .unplantFromGrid(zombieOnGridPos.row, zombieOnGridPos.col);
   }
-
-  public unplantFromLayer(): void {}
 
   public plantOnLayer(
     gridPos: { row: number; col: number },

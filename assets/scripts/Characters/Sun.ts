@@ -76,4 +76,9 @@ export default class Sun extends Entity {
       })
       .start();
   }
+
+  protected die() {
+    cc.Tween.stopAllByTarget(this.node);
+    this.node.destroy();
+  }
 }

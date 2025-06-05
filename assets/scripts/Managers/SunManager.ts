@@ -1,4 +1,5 @@
 import Sun from "../Characters/Sun";
+import { GameSettings } from "../Settings/GameSetting";
 import GameManager from "./GameManager";
 import { IManager } from "./IManager";
 
@@ -6,7 +7,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class SunManager implements IManager {
-  private _unitSunValue: number = undefined;
+  private _unitSunValue = GameSettings.UNIT_SUN_VALUE;
   private _sunLayer: cc.Node = undefined;
   private _sunValue: number = undefined;
   private _gameManager: GameManager = undefined;
@@ -14,19 +15,29 @@ export default class SunManager implements IManager {
   private _sunIconPos: cc.Vec2 = undefined;
 
   public init(
-    unitSunValue: number,
     sunLayer: cc.Node,
     sunPrefab: cc.Prefab,
     gameManager: GameManager
   ): void {
-    this._unitSunValue = unitSunValue;
     this._sunLayer = sunLayer;
     this._sunPrefab = sunPrefab;
     this._gameManager = gameManager;
     this._sunValue = 0;
 
     this._setSunIconPos();
+  }
+
+  public playGame(): void {
     this._startSpawningSun();
+  }
+
+  public endGame(): void {
+    this._sunLayer.children.forEach((sunNode) => {
+      const sunScript = sunNode.getComponent("Sun");
+      sunScript && sunScript.die();
+    });
+
+    this._sunValue = 0;
   }
 
   public onGlobalTouchStart(touchPos: cc.Vec2): boolean {

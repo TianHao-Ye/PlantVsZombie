@@ -16,6 +16,14 @@ export default class ShovelManager implements IManager {
     this._gameManager = gameManager;
   }
 
+  public endGame(): void {
+    if (this._shovelIconClone) {
+      cc.Tween.stopAllByTarget(this._shovelIconClone);
+      this._shovelIconClone.destroy();
+      this._shovelIconClone = undefined;
+    }
+  }
+
   private _shovelMotion(): void {
     cc.tween(this._shovelIconClone)
       .to(0.2, { angle: -20 })

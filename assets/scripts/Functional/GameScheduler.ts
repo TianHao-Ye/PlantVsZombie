@@ -26,10 +26,15 @@ export default class GameScheduler extends cc.Component {
   }
 
   public stopSpawningSun(): void {
-    this.unschedule(this.scheduleSpawningSun);
+    this.unschedule(this._sunSpawnCallback);
   }
 
   public stopSpawningZombie(): void {
-    this.unschedule(this.scheduleSpawningSun);
+    this.unschedule(this._zombieSpawnCallback);
+  }
+
+  public stopAll(): void {
+    this.stopSpawningSun();
+    this.stopSpawningZombie();
   }
 }

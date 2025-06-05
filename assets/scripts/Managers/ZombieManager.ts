@@ -37,19 +37,33 @@ export default class ZoobieManager implements IManager {
       const name = prefab.name;
       this._zombiePrefabMap[name] = prefab;
     }
+  }
 
+  public playGame(): void {
     this._startSpawningZombie();
+  }
+
+  public endGame(): void {
+    this._zombieLayer.children.forEach((zombieNode) => {
+      const zombieScript = zombieNode.getComponent("NormalZombie");
+      zombieScript && zombieScript.die();
+    });
   }
 
   public update(dt: number): void {
     const activeZombies = this._zombieLayer.children;
-    activeZombies.forEach((zombieNode) => {
+    for (const zombieNode of this._zombieLayer.children) {
       const zoombieScriptName = ZoombieScriptMap[zombieNode.name];
       const zoombieScript = zombieNode.getComponent(zoombieScriptName);
 
-      const isZombieLive = zoombieScript.checkNaturalDeath();
-      isZombieLive && this._checkAttack(zombieNode);
-    });
+      const reachedHouse = zoombieScript.checkReachHouse();
+      if (reachedHouse) {
+        zoombieScript.die();
+        this._gameManager.endGame();
+        break;
+      }
+      this._checkAttack(zombieNode);
+    }
   }
 
   private _checkAttack(zombieNode: cc.Node) {
@@ -71,7 +85,7 @@ export default class ZoobieManager implements IManager {
     );
 
     if (!plantNode) {
-      zoombieScript._playWalkingMotion();
+      zoombieScript.playWalkingMotion();
       return;
     } else {
       const zoombieDamage = zoombieScript.getDamage();

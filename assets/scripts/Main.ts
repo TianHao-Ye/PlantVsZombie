@@ -81,8 +81,8 @@ export default class Main extends cc.Component {
   @property(cc.Node)
   public plantCardContainer: cc.Node = undefined;
 
-  @property
-  public unitSunValue: number = 25;
+  @property(cc.Node)
+  public zombiesWonLabel: cc.Node = undefined;
 
   protected onLoad(): void {
     cc.director.getCollisionManager().enabled = true;
@@ -111,8 +111,12 @@ export default class Main extends cc.Component {
       this.sunLabel,
       this.sunIcon,
       this.plantCardContainer,
-      this.unitSunValue
+      this.zombiesWonLabel
     );
+  }
+
+  public playGame(): void {
+    GameManager.getInstance().playGame();
   }
 
   protected update(dt: number): void {

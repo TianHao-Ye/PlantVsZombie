@@ -31,6 +31,10 @@ export default class GridManager implements IManager {
     this._loadGridSystem();
   }
 
+  public endGame(): void {
+    this._loadGridSystem();
+  }
+
   private _loadGridSystem(): void {
     for (let r = 0; r < this._rows; r++) {
       this._gridData[r] = [];
@@ -69,11 +73,16 @@ export default class GridManager implements IManager {
     }
   }
 
-  public unplantFromGrid(row: number, col: number) {
-    if (this._gridData[row][col] !== undefined) {
-      // this._gridData[row][col].destroy();
-      this._gridData[row][col] = undefined;
+  public unplantFromGrid(row: number, col: number): void {
+    const plantNode = this._gridData[row][col];
+
+    if (!plantNode) {
+      return;
     }
+
+    cc.Tween.stopAllByTarget(plantNode);
+    plantNode.destroy();
+    this._gridData[row][col] = undefined;
   }
 
   public getRandomWorldPosY(): number {

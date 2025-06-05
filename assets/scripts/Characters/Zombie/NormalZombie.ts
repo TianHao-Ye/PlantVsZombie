@@ -15,21 +15,21 @@ export default class NormalZombie extends Entity {
 
   protected start(): void {
     this._initMotion();
-    this._playWalkingMotion();
+    this.playWalkingMotion();
   }
-  public checkNaturalDeath(): boolean {
+  public checkReachHouse(): boolean {
+    const reachedHouse = false;
     if (this.node.x == GameSettings.getZombieEndX()) {
-      this.die();
-      return false;
+      return !reachedHouse;
     }
-    return true;
+    return reachedHouse;
   }
 
   private _initMotion(): void {
     this._currentState = ZombieState.Idle;
   }
 
-  private _playWalkingMotion(): void {
+  public playWalkingMotion(): void {
     if (this._currentState === ZombieState.Walking) {
       return;
     }

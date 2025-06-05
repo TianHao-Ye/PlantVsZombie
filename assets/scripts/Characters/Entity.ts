@@ -12,13 +12,13 @@ export default class Entity extends cc.Component {
   public attackInterval: number = 1.5;
 
   public takeDamage(dmg: number): boolean {
-    const plantLive = true;
+    const stillLive = true;
     this.health -= dmg;
     if (this.health <= 0) {
       this.die();
-      return !plantLive;
+      return !stillLive;
     }
-    return plantLive;
+    return stillLive;
   }
 
   protected attack(): void {}

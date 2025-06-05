@@ -31,4 +31,6 @@ export namespace GameSettings {
   export function getBulletEndX(): number {
     return cc.winSize.width / 2 - 50;
   }
+
+  export const UNIT_SUN_VALUE = 25;
 }
