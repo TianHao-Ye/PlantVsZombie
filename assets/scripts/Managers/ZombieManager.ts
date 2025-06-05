@@ -123,7 +123,7 @@ export default class ZoobieManager implements IManager {
     newZombie.setPosition(cc.v2(startX, startY));
   }
 
-  private _startSpawningZombie(interval: number = 10): void {
+  private _startSpawningZombie(interval: number = 15): void {
     this._gameManager
       .getGameScheduler()
       .scheduleSpawningZombie(this._createRandomZombie.bind(this), interval);

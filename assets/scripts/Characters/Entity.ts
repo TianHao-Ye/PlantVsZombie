@@ -14,7 +14,6 @@ export default class Entity extends cc.Component {
   public takeDamage(dmg: number): boolean {
     const stillLive = true;
     this.health -= dmg;
-    console.log(this.health);
     if (this.health <= 0) {
       this.die();
       return !stillLive;

@@ -114,7 +114,7 @@ export default class SunManager implements IManager {
     this._gameManager.getUiManager().updateSunLabel(this._sunValue);
   }
 
-  private _startSpawningSun(interval: number = 5): void {
+  private _startSpawningSun(interval: number = 6): void {
     this._gameManager
       .getGameScheduler()
       .scheduleSpawningSun(this._createRandomFallingSun.bind(this), interval);
