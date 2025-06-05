@@ -33,4 +33,6 @@ export namespace GameSettings {
   }
 
   export const UNIT_SUN_VALUE = 25;
+  export const SUN_LIFE_TIME = 5;
+  export const ZOMBIE_WALK_SPEED = 1;
 }

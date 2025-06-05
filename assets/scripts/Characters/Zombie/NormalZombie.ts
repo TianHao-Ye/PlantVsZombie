@@ -6,10 +6,14 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class NormalZombie extends Entity {
   @property
-  public walkSpeed = 20;
+  public walkSpeed = GameSettings.ZOMBIE_WALK_SPEED;
+
+  @property
+  public damage: number = 40;
 
   private _currentState: ZombieState = undefined;
   private _currentAnimation: cc.Tween = undefined;
+  private _lastAttackInterval = 0;
 
   // LIFE-CYCLE CALLBACKS:
 
@@ -23,6 +27,18 @@ export default class NormalZombie extends Entity {
       return !reachedHouse;
     }
     return reachedHouse;
+  }
+
+  public addLastAttackInterval(dt: number): void {
+    this._lastAttackInterval += dt;
+    if(this._lastAttackInterval >= this.getAttackInterval()){
+      this._lastAttackInterval = 0;
+    }
+
+  }
+
+  public getLastAttackInterval(): number {
+    return this._lastAttackInterval;
   }
 
   private _initMotion(): void {

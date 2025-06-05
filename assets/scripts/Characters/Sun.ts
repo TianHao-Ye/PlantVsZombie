@@ -1,3 +1,4 @@
+import { GameSettings } from "../Settings/GameSetting";
 import Entity from "./Entity";
 
 const { ccclass, property } = cc._decorator;
@@ -5,7 +6,7 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class Sun extends Entity {
   @property
-  public lifeTime: number = 5;
+  public lifeTime: number = GameSettings.SUN_LIFE_TIME;
 
   private _onCollectedCB: () => void;
 

@@ -93,9 +93,9 @@ export default class PlantManager implements IManager {
     if (!gridManager.isOccupied(gridPos.row, gridPos.col)) {
       return;
     }
-    // if (!sunManager.useSunValue(plantCard.getComponent(PlantCard).sunCost)) {
-    //   return;
-    // }
+    if (!sunManager.useSunValue(plantCard.getComponent(PlantCard).sunCost)) {
+      return;
+    }
 
     // create plant node
     const plantNode = cc.instantiate(plantPrefab);

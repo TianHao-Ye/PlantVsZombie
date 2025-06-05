@@ -1,5 +1,4 @@
-import Plant from "../Characters/Plant/Plant";
-import NormalZombie from "../Characters/Zombie/NormalZombie";
+
 import { GameSettings } from "../Settings/GameSetting";
 import GameManager from "./GameManager";
 import { IManager } from "./IManager";
@@ -45,7 +44,8 @@ export default class ZoobieManager implements IManager {
 
   public endGame(): void {
     this._zombieLayer.children.forEach((zombieNode) => {
-      const zombieScript = zombieNode.getComponent("NormalZombie");
+      const zombieScriptName = ZoombieScriptMap[zombieNode.name]
+      const zombieScript = zombieNode.getComponent(zombieScriptName);
       zombieScript && zombieScript.die();
     });
   }
@@ -62,15 +62,16 @@ export default class ZoobieManager implements IManager {
         this._gameManager.endGame();
         break;
       }
-      this._checkAttack(zombieNode);
+      this._checkAttack(zombieNode, dt);
     }
   }
 
-  private _checkAttack(zombieNode: cc.Node) {
+  private _checkAttack(zombieNode: cc.Node, dt: number) {
     const gridManager = this._gameManager.getGridManager();
     const plantManager = this._gameManager.getPlantManager();
     const zoombieScriptName = ZoombieScriptMap[zombieNode.name];
     const zoombieScript = zombieNode.getComponent(zoombieScriptName);
+    zoombieScript.addLastAttackInterval(dt);
 
     const zombiePos = zombieNode.getPosition();
     //check zombie on grid
@@ -88,9 +89,10 @@ export default class ZoobieManager implements IManager {
       zoombieScript.playWalkingMotion();
       return;
     } else {
-      const zoombieDamage = zoombieScript.getDamage();
       zoombieScript.playAttackMotion();
-      plantManager.handleAttack(plantNode, zombieOnGridPos, zoombieDamage);
+      if(zoombieScript.getLastAttackInterval() == 0){
+          plantManager.handleAttack(plantNode, zombieOnGridPos, zoombieScript.getDamage());
+      }
     }
   }
 
