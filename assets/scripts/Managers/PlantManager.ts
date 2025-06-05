@@ -58,12 +58,11 @@ export default class PlantManager implements IManager {
   public handleAttack(
     plantNode: cc.Node,
     zombieOnGridPos: { row: number; col: number },
-    dmg: number
+    damage: number
   ): void {
     const plantScriptName = PlantScriptMap[plantNode.name];
     const plantScript = plantNode.getComponent(plantScriptName);
-    const plantLive = plantScript.takeDamage(dmg);
-    console.log(plantLive);
+    const plantLive = plantScript.takeDamage(damage);
     !plantLive &&
       this._gameManager
         .getGridManager()

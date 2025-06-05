@@ -15,6 +15,7 @@ export default class Entity extends cc.Component {
     const plantLive = true;
     this.health -= dmg;
     if (this.health <= 0) {
+      this.die();
       return !plantLive;
     }
     return plantLive;

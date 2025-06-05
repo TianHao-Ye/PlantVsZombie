@@ -71,7 +71,7 @@ export default class GridManager implements IManager {
 
   public unplantFromGrid(row: number, col: number) {
     if (this._gridData[row][col] !== undefined) {
-      this._gridData[row][col].destroy();
+      // this._gridData[row][col].destroy();
       this._gridData[row][col] = undefined;
     }
   }

@@ -12,7 +12,7 @@ export enum ZombieState {
   Dead,
 }
 
-const ZoombieScriptMap: { [key: string]: string } = {
+export const ZoombieScriptMap: { [key: string]: string } = {
   normal_zombie: "NormalZombie",
 };
 

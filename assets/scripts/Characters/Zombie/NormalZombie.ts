@@ -5,7 +5,7 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class NormalZombie extends Entity {
   @property
-  public walkingSpeed = 1;
+  public walkSpeed = 1;
 
   private _currentState: ZombieState = undefined;
   private _currentAnimation: cc.Tween = undefined;
@@ -37,7 +37,7 @@ export default class NormalZombie extends Entity {
     this.stopAnimation();
     const walkAnimation = cc
       .tween(this.node)
-      .by(1 / this.walkingSpeed, { x: -40 })
+      .by(1 / this.walkSpeed, { x: -40 })
       .repeatForever()
       .start();
     this._currentAnimation = walkAnimation;

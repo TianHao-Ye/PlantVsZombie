@@ -1,4 +1,4 @@
-import NormalZombie from "../Zombie/NormalZombie";
+import { ZoombieScriptMap } from "../../Managers/ZombieManager";
 
 const { ccclass, property } = cc._decorator;
 
@@ -6,6 +6,7 @@ const { ccclass, property } = cc._decorator;
 export default class Pea extends cc.Component {
   private _flySpeed: number = 120;
   private _damage = 20;
+  private _targetX = cc.winSize.width / 2 - 50;
 
   // LIFE-CYCLE CALLBACKS:
 
@@ -14,13 +15,11 @@ export default class Pea extends cc.Component {
   }
 
   protected onCollisionEnter(other: cc.Collider, self: cc.Collider) {
-    const otherNode = other.node;
-    if (otherNode.group === "zombie") {
-      const zombie = otherNode.getComponent(NormalZombie);
-      zombie?.takeDamage(this._damage);
-
-      this.node.destroy();
-    }
+    const zombieNode = other.node;
+    const zoombieScriptName = ZoombieScriptMap[zombieNode.name];
+    const zoombieScript = zombieNode.getComponent(zoombieScriptName);
+    zoombieScript?.takeDamage(this._damage);
+    this.die();
   }
 
   private _playFlyingHorizontalMotion(): void {
@@ -28,15 +27,20 @@ export default class Pea extends cc.Component {
       return;
     }
     const startX = this.node.x;
-    const targetX = cc.winSize.width / 2 - 50;
+    const targetX = this._targetX;
     const distance = targetX - startX;
     const flyTime = Math.abs(distance / this._flySpeed);
 
     cc.tween(this.node)
       .to(flyTime, { x: targetX }, { easing: "linear" })
       .call(() => {
-        this.node.destroy();
+        this.die();
       })
       .start();
+  }
+
+  protected die() {
+    cc.Tween.stopAllByTarget(this.node);
+    this.node.destroy();
   }
 }
